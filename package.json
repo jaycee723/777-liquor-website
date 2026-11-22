@@ -6,12 +6,19 @@
     "777-Liquor-Website/website/packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=tanstack_start_ts",
-    "build": "npm run build --workspace=tanstack_start_ts",
-    "lint": "npm run lint --workspace=tanstack_start_ts",
+    "dev": "npm --prefix 777-Liquor-Website/website run dev",
+    "build": "npm --prefix 777-Liquor-Website/website run build",
+    "lint": "npm --prefix 777-Liquor-Website/website run lint",
     "deploy": "npm run build && npx wrangler deploy"
   },
   "devDependencies": {
     "wrangler": "^4.135.0"
+  },
+  "dependencies": {
+    "lucide-react": "^1.77.0",
+    "xlsx": "^0.18.5"
+  },
+  "overrides": {
+    "vite": "^7.3.1"
   }
 }
