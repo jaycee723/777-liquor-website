@@ -1,31 +1,8 @@
 import { onAuthStateChanged, signInWithPopup, signOut, type User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { auth, BOOTSTRAPPED_ADMIN_EMAIL, db, googleProvider } from "../lib/firebase";
-
-type FirebaseContextValue = {
-  user: User | null;
-  authReady: boolean;
-  isAdmin: boolean;
-  signInWithGoogle: () => Promise<void>;
-  signOutUser: () => Promise<void>;
-};
-
-const FirebaseContext = createContext<FirebaseContextValue>({
-  user: null,
-  authReady: false,
-  isAdmin: false,
-  signInWithGoogle: async () => {},
-  signOutUser: async () => {},
-});
+import { FirebaseContext, type FirebaseContextValue } from "../lib/firebase-auth-context";
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -83,8 +60,4 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
   );
 
   return <FirebaseContext.Provider value={value}>{children}</FirebaseContext.Provider>;
-}
-
-export function useFirebaseAuth() {
-  return useContext(FirebaseContext);
 }

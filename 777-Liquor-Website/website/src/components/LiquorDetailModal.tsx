@@ -4,7 +4,7 @@ import { useInventoryItem } from "../hooks/useInventory";
 import { STORE } from "../lib/store-info";
 import { saveCoolerItem, type InventoryItem } from "../services/inventory.service";
 import { BrandLogo } from "./brand-logo";
-import { useFirebaseAuth } from "./FirebaseProvider";
+import { useFirebaseAuth } from "../lib/firebase-auth-context";
 
 type LiquorDetailModalProps = {
   item: InventoryItem | null;

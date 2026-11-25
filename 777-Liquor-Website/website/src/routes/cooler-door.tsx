@@ -10,7 +10,7 @@ import {
   Upload,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { useFirebaseAuth } from "../components/FirebaseProvider";
+import { useFirebaseAuth } from "../lib/firebase-auth-context";
 import { KegModal } from "../components/KegModal";
 import { LiquorCatalog } from "../components/LiquorCatalog";
 import { SiteFooter } from "../components/SiteFooter";

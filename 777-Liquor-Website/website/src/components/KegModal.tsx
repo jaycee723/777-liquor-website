@@ -16,6 +16,7 @@ export function KegModal({ open, onClose, openerRef }: KegModalProps) {
 
   useEffect(() => {
     if (!open) return;
+    const opener = openerRef?.current ?? null;
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
@@ -47,7 +48,7 @@ export function KegModal({ open, onClose, openerRef }: KegModalProps) {
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      openerRef?.current?.focus();
+      opener?.focus();
     };
   }, [open, onClose, openerRef]);
 
