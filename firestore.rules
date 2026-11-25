@@ -66,6 +66,10 @@ service cloud.firestore {
           'category',
           'size',
           'price',
+          'description',
+          'abv',
+          'origin',
+          'inStock',
           'visibility',
           'updatedBy',
           'updatedAt'
@@ -76,6 +80,10 @@ service cloud.firestore {
         data.category in ['Beer', 'RTD', 'Spirits', 'Wine', 'Beverages'] &&
         data.size is string && data.size.size() <= 40 &&
         (data.price is int || data.price is float) && data.price > 0 && data.price <= 10000 &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 500)) &&
+        (!('abv' in data) || (data.abv is string && data.abv.size() <= 20)) &&
+        (!('origin' in data) || (data.origin is string && data.origin.size() <= 80)) &&
+        (!('inStock' in data) || data.inStock is bool) &&
         data.visibility is string && data.visibility.size() <= 16 &&
         data.visibility in ['public', 'hidden'] &&
         isValidId(data.updatedBy) &&
@@ -153,6 +161,10 @@ service cloud.firestore {
           'category',
           'size',
           'price',
+          'description',
+          'abv',
+          'origin',
+          'inStock',
           'visibility',
           'updatedBy',
           'updatedAt'

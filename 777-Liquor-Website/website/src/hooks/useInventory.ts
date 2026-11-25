@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadCoolerDoorInventory } from "../lib/inventory";
 import {
+  fetchInventoryItemDetail,
   fetchInventoryList,
   subscribeToInventoryList,
+  type CoolerItemDetail,
   type InventoryItem,
   type InventorySource,
 } from "../services/inventory.service";
@@ -25,6 +27,13 @@ export type UseInventoryResult = {
   loading: boolean;
   error: string | null;
   refresh: (forceReload?: boolean) => Promise<void>;
+};
+
+export type UseInventoryItemResult = {
+  detail: CoolerItemDetail | null;
+  loading: boolean;
+  error: string | null;
+  refresh: () => Promise<void>;
 };
 
 /**
@@ -159,5 +168,78 @@ export function useInventory(options: UseInventoryOptions = {}): UseInventoryRes
     loading,
     error,
     refresh,
+  };
+}
+
+/**
+ * React hook that loads full product details for a selected Cooler Door item from Firestore.
+ */
+export function useInventoryItem(item: InventoryItem | null): UseInventoryItemResult {
+  const [detail, setDetail] = useState<CoolerItemDetail | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadDetail = useCallback(async () => {
+    if (!item) {
+      setDetail(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const nextDetail = await fetchInventoryItemDetail(item.id, item);
+      setDetail(nextDetail);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not load additional product information.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [item]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let cancelled = false;
+
+    if (!item) {
+      setDetail(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    fetchInventoryItemDetail(item.id, item)
+      .then((nextDetail) => {
+        if (!cancelled) {
+          setDetail(nextDetail);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(
+            err instanceof Error ? err.message : "Could not load additional product information.",
+          );
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [item]);
+
+  return {
+    detail,
+    loading,
+    error,
+    refresh: loadDetail,
   };
 }

@@ -32,6 +32,25 @@
           "type": "number",
           "description": "Retail price in USD."
         },
+        "description": {
+          "type": "string",
+          "description": "Optional tasting notes or product description.",
+          "maxLength": 500
+        },
+        "abv": {
+          "type": "string",
+          "description": "Optional alcohol by volume label (e.g., 5.0% ABV).",
+          "maxLength": 20
+        },
+        "origin": {
+          "type": "string",
+          "description": "Optional region or country of origin (e.g., Honolulu, HI).",
+          "maxLength": 80
+        },
+        "inStock": {
+          "type": "boolean",
+          "description": "Optional cooler availability indicator."
+        },
         "visibility": {
           "type": "string",
           "description": "Visibility state for public storefront menu queries.",

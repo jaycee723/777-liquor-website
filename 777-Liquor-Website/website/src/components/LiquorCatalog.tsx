@@ -1,7 +1,9 @@
 import { RotateCcw, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 import { STORE } from "../lib/store-info";
 import type { InventoryItem } from "../services/inventory.service";
 import { BrandLogo } from "./brand-logo";
+import { LiquorDetailModal } from "./LiquorDetailModal";
 
 export type LiquorCatalogProps = {
   items: InventoryItem[];
@@ -13,6 +15,7 @@ export type LiquorCatalogProps = {
   onPageChange?: (nextPage: number) => void;
   onRetry?: () => void;
   onResetFilters?: () => void;
+  onSelectBrand?: (brand: string) => void;
   canDelete?: boolean;
   deleteDisabled?: boolean;
   onDeleteItem?: (itemId: string, itemName: string) => void;
@@ -71,7 +74,8 @@ export function LiquorCatalogSkeleton({ count = 12 }: { count?: number }) {
 
 /**
  * Responsive Cooler Door product grid displaying normalized inventory items,
- * brand logos, tabular pricing, pagination, and skeleton/empty/error states.
+ * brand logos, tabular pricing, interactive product detail modal, pagination,
+ * and skeleton/empty/error states.
  */
 export function LiquorCatalog({
   items,
@@ -83,10 +87,14 @@ export function LiquorCatalog({
   onPageChange,
   onRetry,
   onResetFilters,
+  onSelectBrand,
   canDelete = false,
   deleteDisabled = false,
   onDeleteItem,
 }: LiquorCatalogProps) {
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+
   if (loading) {
     return <LiquorCatalogSkeleton count={skeletonCount} />;
   }
@@ -143,38 +151,52 @@ export function LiquorCatalog({
         {items.map((item) => (
           <article
             key={item.id}
-            className="flex items-start gap-4 rounded-2xl border border-slate-800 bg-[#111B2B] p-5 transition-colors hover:border-cyan-400/50 hover:bg-[#162235]"
+            className="group relative flex items-start gap-4 rounded-2xl border border-slate-800 bg-[#111B2B] p-5 transition-colors hover:border-cyan-400/50 hover:bg-[#162235]"
           >
-            <BrandLogo brand={item.brand} size={56} showFallbackBadge className="shrink-0" />
-            <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
-              <div>
-                <p className="text-xs font-medium text-slate-400">
-                  {item.category} · {item.brand}
-                </p>
-                <h2 className="mt-1 font-display text-base font-bold leading-snug text-slate-100">
-                  {item.name}
-                </h2>
-              </div>
-              <div className="mt-1 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-2">
-                <span className="font-mono text-xs text-slate-400">{item.size || "In store"}</span>
-                <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                openerRef.current = e.currentTarget;
+                setSelectedItem(item);
+              }}
+              aria-label={`View details for ${item.name}`}
+              className="flex min-w-0 flex-1 cursor-pointer items-start gap-4 text-left focus-visible:outline-none"
+            >
+              <BrandLogo brand={item.brand} size={56} showFallbackBadge className="shrink-0" />
+              <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
+                <div>
+                  <p className="text-xs font-medium text-slate-400">
+                    {item.category} · {item.brand}
+                  </p>
+                  <h2 className="mt-1 font-display text-base font-bold leading-snug text-slate-100 transition-colors group-hover:text-cyan-300">
+                    {item.name}
+                  </h2>
+                </div>
+                <div className="mt-1 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-2">
+                  <span className="font-mono text-xs text-slate-400">
+                    {item.size || "In store"}
+                  </span>
                   <span className="font-mono text-lg font-bold tabular-nums text-cyan-300">
                     {formatPrice(item.price)}
                   </span>
-                  {canDelete && onDeleteItem && (
-                    <button
-                      type="button"
-                      disabled={deleteDisabled}
-                      aria-label={`Remove ${item.name}`}
-                      onClick={() => onDeleteItem(item.id, item.name)}
-                      className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-slate-700 text-slate-400 transition hover:border-red-400 hover:text-red-300 disabled:opacity-40"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                    </button>
-                  )}
                 </div>
               </div>
-            </div>
+            </button>
+
+            {canDelete && onDeleteItem && (
+              <button
+                type="button"
+                disabled={deleteDisabled}
+                aria-label={`Remove ${item.name}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteItem(item.id, item.name);
+                }}
+                className="inline-flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-slate-700 text-slate-400 transition hover:border-red-400 hover:text-red-300 disabled:opacity-40"
+              >
+                <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+            )}
           </article>
         ))}
       </div>
@@ -208,6 +230,13 @@ export function LiquorCatalog({
           </button>
         </nav>
       )}
+
+      <LiquorDetailModal
+        item={selectedItem}
+        onClose={() => setSelectedItem(null)}
+        onSelectBrand={onSelectBrand}
+        openerRef={openerRef}
+      />
     </>
   );
 }

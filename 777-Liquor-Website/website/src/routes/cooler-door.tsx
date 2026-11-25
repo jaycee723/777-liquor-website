@@ -639,6 +639,12 @@ function CoolerDoorPage() {
             onPageChange={setPage}
             onRetry={() => void refresh(true)}
             onResetFilters={resetFilters}
+            onSelectBrand={(brand) => {
+              setSelectedCategory("All");
+              setSelectedBrand(brand);
+              setQuery("");
+              setPage(1);
+            }}
             canDelete={managerOpen && isAdmin && usingDatabase}
             deleteDisabled={managerBusy}
             onDeleteItem={(id, name) => void handleDeleteItem(id, name)}
