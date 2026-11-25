@@ -1,0 +1,70 @@
+name: Sync Cooler Door inventory
+
+# The Cooler Door page mirrors the inventory spreadsheet filed in this repo.
+# Whenever the spreadsheet (a Clover inventory export) is added, replaced,
+# or removed on main, this workflow re-runs the connector
+# (scripts/sync_cooler_door.py), which:
+#   * keeps only alcoholic beverages and liquor, with each item's price,
+#   * resolves a brand logo for every item, searching online through the
+#     existing fetch_logos pipeline for brands that don't have one yet,
+#   * regenerates website/src/data/cooler-door-items.json from scratch, so
+#     items removed from the sheet disappear from the page.
+# The regenerated catalog is committed back, which triggers the site deploy.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 777-Liquor-Website/website/public/inventory/cooler-door-inventory.xlsx
+      - 777-Liquor-Website/website/public/inventory/cooler-door-inventory.csv
+      - scripts/sync_cooler_door.py
+      - scripts/brand_list.csv
+      - .github/workflows/sync-cooler-door.yml
+
+concurrency:
+  group: sync-cooler-door
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - run: pip install -r scripts/requirements.txt
+
+      - name: Translate spreadsheet to Cooler Door catalog
+        run: python scripts/sync_cooler_door.py --fetch-missing
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cooler-door-sync-reports
+          path: reports/cooler-door/
+          if-no-files-found: ignore
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A 777-Liquor-Website/website/src/data/cooler-door-items.json \
+                     777-Liquor-Website/website/public/images/brands \
+                     scripts/brand_list.csv reports/cooler-door reports/logo-fetch
+          if git diff --cached --quiet; then echo "No changes to commit."; exit 0; fi
+          git commit -m "chore: sync Cooler Door inventory from spreadsheet"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "Push attempt $i failed, retrying..."; sleep $((i * 5))
+          done
+          echo "Could not push after 5 attempts." >&2; exit 1
