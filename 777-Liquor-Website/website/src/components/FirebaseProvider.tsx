@@ -1,7 +1,7 @@
 import { onAuthStateChanged, signInWithPopup, signOut, type User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { auth, BOOTSTRAPPED_ADMIN_EMAIL, db, googleProvider } from "../lib/firebase";
+import { auth, BOOTSTRAPPED_ADMIN_EMAIL, getDb, googleProvider } from "../lib/firebase";
 import { FirebaseContext, type FirebaseContextValue } from "../lib/firebase-auth-context";
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
@@ -28,7 +28,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const adminDoc = await getDoc(doc(db, "admins", nextUser.uid));
+        const adminDoc = await getDoc(doc(getDb(), "admins", nextUser.uid));
         setIsAdmin(adminDoc.exists() && nextUser.emailVerified);
       } catch {
         setIsAdmin(false);
