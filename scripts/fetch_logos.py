@@ -60,9 +60,15 @@ def title_ok(brand, title):
 
 def api(s, url, **params):
     params.update(format="json", formatversion=2)
-    r = s.get(url, params=params, timeout=30)
-    r.raise_for_status()
-    return r.json()
+    for attempt in range(3):
+        r = s.get(url, params=params, timeout=30)
+        r.raise_for_status()
+        try:
+            return r.json()
+        except requests.exceptions.JSONDecodeError:
+            if attempt == 2:
+                raise
+            time.sleep(2 ** attempt)
 
 def imageinfo_by_search(s, brand, ftype):
     d = api(s, COMMONS, action="query", generator="search", gsrnamespace=6, gsrlimit=10,
