@@ -1,11 +1,32 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { doc, getDocFromServer, getFirestore } from "firebase/firestore";
+import { doc, getDocFromServer, getFirestore, type Firestore } from "firebase/firestore";
 import firebaseConfig from "../../../../firebase-applet-config.json";
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+let dbInstance: Firestore | null = null;
+
+/**
+ * Lazily creates the Firestore client, in the browser only.
+ *
+ * Firestore's SDK loads protobuf definitions with code generation
+ * (`new Function`), which Cloudflare Workers forbids — constructing the
+ * client during server-side rendering crashed every page with HTTP 500
+ * (EvalError: Code generation from strings disallowed). All Firestore use
+ * in this app happens in browser effects and event handlers, so the client
+ * is created on first use there instead of at module load.
+ */
+export function getDb(): Firestore {
+  if (typeof window === "undefined") {
+    throw new Error("Firestore is only available in the browser.");
+  }
+  if (!dbInstance) {
+    dbInstance = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+  }
+  return dbInstance;
+}
+
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const BOOTSTRAPPED_ADMIN_EMAIL = "777liquorstorehi@gmail.com";
@@ -64,7 +85,7 @@ export function handleFirestoreError(
 
 async function testConnection() {
   try {
-    await getDocFromServer(doc(db, "test", "connection"));
+    await getDocFromServer(doc(getDb(), "test", "connection"));
   } catch (error) {
     if (error instanceof Error && error.message.includes("the client is offline")) {
       console.error("Please check your Firebase configuration.");

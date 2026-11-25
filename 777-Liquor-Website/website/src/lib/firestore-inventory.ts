@@ -9,7 +9,7 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { db, handleFirestoreError, OperationType } from "./firebase";
+import { getDb, handleFirestoreError, OperationType } from "./firebase";
 import { normalizeCategory, normalizeInventoryText, type InventoryItem } from "./inventory";
 
 // Blueprint volumetric boundaries & constraints (synced with firebase-blueprint.json)
@@ -97,7 +97,10 @@ function buildValidatedPayload(input: SaveCoolerItemInput, uid: string) {
  */
 export async function fetchPublicCoolerItems(): Promise<InventoryItem[]> {
   try {
-    const q = query(collection(db, COOLER_ITEMS_COLLECTION), where("visibility", "==", "public"));
+    const q = query(
+      collection(getDb(), COOLER_ITEMS_COLLECTION),
+      where("visibility", "==", "public"),
+    );
     const snapshot = await getDocs(q);
     const items: InventoryItem[] = [];
     snapshot.forEach((docSnap) => {
@@ -133,7 +136,7 @@ export async function saveCoolerItem(
   const path = `${COOLER_ITEMS_COLLECTION}/${itemId}`;
 
   try {
-    await setDoc(doc(db, COOLER_ITEMS_COLLECTION, itemId), payload);
+    await setDoc(doc(getDb(), COOLER_ITEMS_COLLECTION, itemId), payload);
     return {
       id: itemId,
       name: payload.name,
@@ -154,7 +157,7 @@ export async function deleteCoolerItem(itemId: string): Promise<void> {
   const safeId = toSafeDocumentId(itemId);
   const path = `${COOLER_ITEMS_COLLECTION}/${safeId}`;
   try {
-    await deleteDoc(doc(db, COOLER_ITEMS_COLLECTION, safeId));
+    await deleteDoc(doc(getDb(), COOLER_ITEMS_COLLECTION, safeId));
   } catch (error) {
     handleFirestoreError(error, OperationType.DELETE, path);
   }
@@ -173,11 +176,11 @@ export async function syncInventoryToFirestore(
   try {
     for (let i = 0; i < items.length; i += BATCH_SIZE) {
       const chunk = items.slice(i, i + BATCH_SIZE);
-      const batch = writeBatch(db);
+      const batch = writeBatch(getDb());
       for (const item of chunk) {
         const payload = buildValidatedPayload(item, uid);
         const itemId = toSafeDocumentId(`${payload.brand}-${payload.name}`);
-        batch.set(doc(db, COOLER_ITEMS_COLLECTION, itemId), payload);
+        batch.set(doc(getDb(), COOLER_ITEMS_COLLECTION, itemId), payload);
         synced += 1;
       }
       await batch.commit();
