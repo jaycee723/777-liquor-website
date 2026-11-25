@@ -1,0 +1,189 @@
+{
+  "entities": {
+    "CoolerItem": {
+      "title": "CoolerItem",
+      "description": "A beverage item and price displayed on the 777 Liquor Cooler Door menu.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Normalized product name following 777 Liquor capitalization rules (e.g., Heineken Lager 12pk 12oz Bottles).",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "brand": {
+          "type": "string",
+          "description": "Normalized alcohol brand name linked to public/images/brands.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "category": {
+          "type": "string",
+          "description": "Store beverage category.",
+          "enum": ["Beer", "RTD", "Spirits", "Wine", "Beverages"],
+          "maxLength": 40
+        },
+        "size": {
+          "type": "string",
+          "description": "Normalized pack or container size (e.g., 12pk 12oz, 1 L, 750ml).",
+          "maxLength": 40
+        },
+        "price": {
+          "type": "number",
+          "description": "Retail price in USD."
+        },
+        "visibility": {
+          "type": "string",
+          "description": "Visibility state for public storefront menu queries.",
+          "enum": ["public", "hidden"],
+          "maxLength": 16
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Firebase Auth UID of the admin who last updated the item.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when this item was created or last modified."
+        }
+      },
+      "required": [
+        "name",
+        "brand",
+        "category",
+        "size",
+        "price",
+        "visibility",
+        "updatedBy",
+        "updatedAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Trusted store administrator record granting Cooler Door inventory management privileges.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the administrator.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified administrator email address.",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "role": {
+          "type": "string",
+          "description": "Administrative role identifier.",
+          "enum": ["admin"],
+          "maxLength": 16
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when admin access was granted."
+        }
+      },
+      "required": ["uid", "email", "role", "createdAt"]
+    },
+    "KegInquiry": {
+      "title": "KegInquiry",
+      "description": "Customer keg pre-order inquiry stored privately per user and readable by store admins.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the customer who submitted the inquiry.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Customer full name.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "description": "Customer callback phone number.",
+          "minLength": 7,
+          "maxLength": 40
+        },
+        "brand": {
+          "type": "string",
+          "description": "Requested keg brand name.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "pickupDay": {
+          "type": "string",
+          "description": "Scheduled morning pickup day.",
+          "enum": ["Wednesday", "Friday"],
+          "maxLength": 16
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional event date, keg size, or pump rental notes.",
+          "maxLength": 2000
+        },
+        "status": {
+          "type": "string",
+          "description": "Lifecycle status of the keg inquiry.",
+          "enum": ["submitted", "confirmed", "cancelled"],
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the inquiry was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the inquiry was last updated."
+        }
+      },
+      "required": [
+        "userId",
+        "name",
+        "phone",
+        "brand",
+        "pickupDay",
+        "notes",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/coolerItems/{itemId}": {
+      "schema": {
+        "$ref": "#/entities/CoolerItem"
+      },
+      "description": "Publicly readable Cooler Door beverage catalog and pricing managed exclusively by verified store administrators."
+    },
+    "/admins/{adminUid}": {
+      "schema": {
+        "$ref": "#/entities/AdminUser"
+      },
+      "description": "Trusted administrator lookup documents isolating admin PII to the owner and bootstrapped store owner."
+    },
+    "/kegInquiries/{inquiryId}": {
+      "schema": {
+        "$ref": "#/entities/KegInquiry"
+      },
+      "description": "Private customer keg pre-order inquiries accessible only by the submitting user and store administrators."
+    }
+  }
+}

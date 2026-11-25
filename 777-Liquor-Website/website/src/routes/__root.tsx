@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { FirebaseProvider } from "../components/FirebaseProvider";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import { SEO_DESCRIPTION, SEO_TITLE, STORE, localBusinessJsonLd } from "../lib/store-info";
 import appMetaJson from "../app-meta.json";
@@ -194,7 +195,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <FirebaseProvider>
+        <Outlet />
+      </FirebaseProvider>
     </QueryClientProvider>
   );
 }

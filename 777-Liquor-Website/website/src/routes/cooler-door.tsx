@@ -1,16 +1,32 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Download, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { BrandLogo } from "../components/brand-logo";
+import {
+  Download,
+  Lock,
+  LogOut,
+  Plus,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+  Upload,
+} from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useFirebaseAuth } from "../components/FirebaseProvider";
 import { KegModal } from "../components/KegModal";
+import { LiquorCatalog } from "../components/LiquorCatalog";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
+import { useInventory } from "../hooks/useInventory";
 import {
   INVENTORY_FILE_URL,
   loadCoolerDoorInventory,
-  type InventoryCatalog,
+  parseInventoryWorkbook,
 } from "../lib/inventory";
 import { STORE } from "../lib/store-info";
+import {
+  deleteCoolerItem,
+  saveCoolerItem,
+  syncInventoryToFirestore,
+} from "../services/inventory.service";
 import "../home-refresh.css";
 
 type CoolerDoorSearch = {
@@ -42,6 +58,7 @@ export const Route = createFileRoute("/cooler-door")({
 
 type SortOption = "name-asc" | "price-asc" | "price-desc";
 const ITEMS_PER_PAGE = 48;
+const MANAGER_CATEGORIES = ["Beer", "RTD", "Spirits", "Wine", "Beverages"] as const;
 
 function formatPrice(price: number): string {
   return `$${price.toFixed(2)}`;
@@ -49,9 +66,13 @@ function formatPrice(price: number): string {
 
 function CoolerDoorPage() {
   const initialSearch = Route.useSearch();
-  const [catalog, setCatalog] = useState<InventoryCatalog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { user, isAdmin, signInWithGoogle, signOutUser } = useFirebaseAuth();
+  const { items, categories, source, updatedAt, loading, error, refresh } = useInventory({
+    realtime: true,
+    includeExcelFallback: true,
+  });
+
+  const usingDatabase = source === "firestore";
 
   const [query, setQuery] = useState(initialSearch.q ?? "");
   const [selectedCategory, setSelectedCategory] = useState(initialSearch.category ?? "All");
@@ -62,27 +83,17 @@ function CoolerDoorPage() {
   const [showKeg, setShowKeg] = useState(false);
   const openerRef = useRef<HTMLElement | null>(null);
 
-  const fetchInventory = (forceReload = false) => {
-    setLoading(true);
-    setError(null);
-    loadCoolerDoorInventory(forceReload)
-      .then((data) => {
-        setCatalog(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "We could not load the Cooler Door Excel inventory right now.",
-        );
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    fetchInventory(false);
-  }, []);
+  // Store Manager Panel State
+  const [managerOpen, setManagerOpen] = useState(false);
+  const [managerBusy, setManagerBusy] = useState(false);
+  const [managerMessage, setManagerMessage] = useState<string | null>(null);
+  const [managerError, setManagerError] = useState<string | null>(null);
+  const [newName, setNewName] = useState("");
+  const [newBrand, setNewBrand] = useState("");
+  const [newCategory, setNewCategory] = useState<string>("Beer");
+  const [newSize, setNewSize] = useState("");
+  const [newPrice, setNewPrice] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Keep local filter synced when navigating here with query params
   useEffect(() => {
@@ -92,29 +103,17 @@ function CoolerDoorPage() {
     setPage(1);
   }, [initialSearch.category, initialSearch.brand, initialSearch.q]);
 
-  const categories = useMemo(() => {
-    if (!catalog) return ["All"];
-    const unique = Array.from(new Set(catalog.items.map((item) => item.category))).sort((a, b) =>
-      a.localeCompare(b),
-    );
-    return ["All", ...unique];
-  }, [catalog]);
-
   const brands = useMemo(() => {
-    if (!catalog) return ["All"];
     const pool =
       selectedCategory === "All"
-        ? catalog.items
-        : catalog.items.filter(
-            (item) => item.category.toLowerCase() === selectedCategory.toLowerCase(),
-          );
+        ? items
+        : items.filter((item) => item.category.toLowerCase() === selectedCategory.toLowerCase());
     const unique = Array.from(new Set(pool.map((item) => item.brand))).sort((a, b) =>
       a.localeCompare(b),
     );
     return ["All", ...unique];
-  }, [catalog, selectedCategory]);
+  }, [items, selectedCategory]);
 
-  // If the current brand is not present in the newly selected category, reset brand cleanly
   const activeBrand =
     selectedBrand !== "All" && brands.some((b) => b.toLowerCase() === selectedBrand.toLowerCase())
       ? (brands.find((b) => b.toLowerCase() === selectedBrand.toLowerCase()) ?? "All")
@@ -123,10 +122,9 @@ function CoolerDoorPage() {
         : selectedBrand;
 
   const filteredItems = useMemo(() => {
-    if (!catalog) return [];
     const normalizedQuery = query.trim().toLowerCase();
 
-    const matched = catalog.items.filter((item) => {
+    const matched = items.filter((item) => {
       if (
         selectedCategory !== "All" &&
         item.category.toLowerCase() !== selectedCategory.toLowerCase()
@@ -159,7 +157,7 @@ function CoolerDoorPage() {
       sorted.sort((a, b) => a.name.localeCompare(b.name));
     }
     return sorted;
-  }, [catalog, query, selectedCategory, activeBrand, sortBy]);
+  }, [items, query, selectedCategory, activeBrand, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / ITEMS_PER_PAGE));
   const safePage = Math.min(page, totalPages);
@@ -177,6 +175,102 @@ function CoolerDoorPage() {
     setPage(1);
   };
 
+  const handleSignIn = async () => {
+    setManagerError(null);
+    setManagerMessage(null);
+    try {
+      await signInWithGoogle();
+    } catch {
+      setManagerError("Sign-in was cancelled or blocked. Please try again.");
+    }
+  };
+
+  const handleSyncDefaultExcel = async () => {
+    if (!user || !isAdmin) return;
+    setManagerBusy(true);
+    setManagerError(null);
+    setManagerMessage(null);
+    try {
+      const excelCatalog = await loadCoolerDoorInventory(true);
+      const count = await syncInventoryToFirestore(excelCatalog.items, user.uid);
+      setManagerMessage(`Synced ${count} items from cooler-door-inventory.xlsx.`);
+    } catch (err) {
+      setManagerError(
+        err instanceof Error ? err.message : "Could not sync the Excel sheet right now.",
+      );
+    } finally {
+      setManagerBusy(false);
+    }
+  };
+
+  const handleExcelUpload = async (file: File | undefined) => {
+    if (!file || !user || !isAdmin) return;
+    setManagerBusy(true);
+    setManagerError(null);
+    setManagerMessage(null);
+    try {
+      const buffer = await file.arrayBuffer();
+      const parsed = parseInventoryWorkbook(buffer, file.name);
+      if (!parsed.items.length) {
+        throw new Error("No valid product and price rows were found in that spreadsheet.");
+      }
+      const count = await syncInventoryToFirestore(parsed.items, user.uid);
+      setManagerMessage(`Imported ${count} normalized items from ${file.name}.`);
+    } catch (err) {
+      setManagerError(
+        err instanceof Error ? err.message : "Could not import that Excel spreadsheet.",
+      );
+    } finally {
+      setManagerBusy(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleAddItem = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!user || !isAdmin) return;
+    setManagerBusy(true);
+    setManagerError(null);
+    setManagerMessage(null);
+    try {
+      const parsedPrice = Number.parseFloat(newPrice);
+      const saved = await saveCoolerItem(
+        {
+          name: newName,
+          brand: newBrand,
+          category: newCategory,
+          size: newSize,
+          price: parsedPrice,
+        },
+        user.uid,
+      );
+      setNewName("");
+      setNewBrand("");
+      setNewSize("");
+      setNewPrice("");
+      setManagerMessage(`Saved "${saved.name}" (${formatPrice(saved.price)}).`);
+    } catch (err) {
+      setManagerError(err instanceof Error ? err.message : "Could not save item.");
+    } finally {
+      setManagerBusy(false);
+    }
+  };
+
+  const handleDeleteItem = async (itemId: string, itemName: string) => {
+    if (!user || !isAdmin || !usingDatabase) return;
+    setManagerBusy(true);
+    setManagerError(null);
+    setManagerMessage(null);
+    try {
+      await deleteCoolerItem(itemId);
+      setManagerMessage(`Removed "${itemName}".`);
+    } catch (err) {
+      setManagerError(err instanceof Error ? err.message : "Could not remove item.");
+    } finally {
+      setManagerBusy(false);
+    }
+  };
+
   return (
     <div className="min-h-dvh bg-[#070D14] text-slate-100 flex flex-col">
       <SiteHeader
@@ -191,14 +285,14 @@ function CoolerDoorPage() {
         <section className="flex flex-col justify-between gap-6 border-b border-slate-800/90 pb-8 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <p className="font-mono text-xs font-medium tracking-[0.14em] text-cyan-400 uppercase">
-              Cooler Door · Live Excel Inventory
+              Cooler Door · Live Inventory &amp; Pricing
             </p>
             <h1 className="mt-2 font-display text-3xl font-extrabold tracking-tight text-slate-100 sm:text-5xl">
               Cold drinks &amp; <span className="text-cyan-400">current prices.</span>
             </h1>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
-              Products and prices below are loaded directly from our Excel inventory spreadsheet and
-              paired with logos from our local alcohol brand folder.
+              Browse cold beer, ready-to-drink cocktails, spirits, and wine paired with logos from
+              our local alcohol brand folder.
             </p>
           </div>
 
@@ -217,10 +311,182 @@ function CoolerDoorPage() {
               <Download className="h-4 w-4 text-cyan-400" aria-hidden="true" />
               Excel sheet (.xlsx)
             </a>
+            <button
+              type="button"
+              onClick={() => setManagerOpen((open) => !open)}
+              aria-expanded={managerOpen}
+              className={`inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-4 text-sm font-medium transition ${
+                managerOpen
+                  ? "border-cyan-400 bg-cyan-400/10 text-cyan-300"
+                  : "border-slate-700 bg-[#0B1220] text-slate-300 hover:border-cyan-400 hover:text-cyan-300"
+              }`}
+            >
+              <Lock className="h-4 w-4 text-cyan-400" aria-hidden="true" />
+              Manage inventory
+            </button>
           </div>
         </section>
 
-        {/* Clean Hairline Notice (No thick left accent border) */}
+        {/* Store Manager Panel */}
+        {managerOpen && (
+          <section
+            aria-label="Store inventory manager"
+            className="mt-6 rounded-2xl border border-slate-800 bg-[#0D1624] p-5 sm:p-6"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+              <div>
+                <h2 className="font-display text-lg font-bold text-slate-100">
+                  Store Inventory Manager
+                </h2>
+                <p className="mt-1 text-sm text-slate-400">
+                  Upload an Excel (.xlsx) inventory sheet or add individual items. Product names and
+                  sizes are normalized automatically (e.g. 11oz, 1 L).
+                </p>
+              </div>
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-slate-400">{user.email}</span>
+                  <button
+                    type="button"
+                    onClick={() => void signOutUser()}
+                    className="inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-lg border border-slate-700 bg-[#111B2B] px-3 text-xs font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+                  >
+                    <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+                    Sign out
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => void handleSignIn()}
+                  className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl bg-cyan-400 px-5 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
+                >
+                  Sign in with Google
+                </button>
+              )}
+            </div>
+
+            {user && !isAdmin && (
+              <p className="mt-4 text-sm text-amber-300">
+                Signed in as {user.email}. Only the authorized store owner account can update Cooler
+                Door inventory.
+              </p>
+            )}
+
+            {user && isAdmin && (
+              <div className="mt-5 space-y-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".xlsx,.xls,.csv"
+                    className="sr-only"
+                    id="excel-upload-input"
+                    disabled={managerBusy}
+                    onChange={(e) => void handleExcelUpload(e.target.files?.[0])}
+                  />
+                  <label
+                    htmlFor="excel-upload-input"
+                    className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl bg-cyan-400 px-4 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
+                  >
+                    <Upload className="h-4 w-4" aria-hidden="true" />
+                    Upload Excel (.xlsx) file
+                  </label>
+                  <button
+                    type="button"
+                    disabled={managerBusy}
+                    onClick={() => void handleSyncDefaultExcel()}
+                    className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#111B2B] px-4 text-sm font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300 disabled:opacity-50"
+                  >
+                    Sync default inventory sheet
+                  </button>
+                </div>
+
+                <form
+                  onSubmit={(e) => void handleAddItem(e)}
+                  className="grid grid-cols-1 gap-3 border-t border-slate-800/80 pt-5 sm:grid-cols-2 lg:grid-cols-6"
+                >
+                  <input
+                    type="text"
+                    required
+                    maxLength={140}
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder="Product Name (e.g. Heineken 12pk 12oz)"
+                    disabled={managerBusy}
+                    className="min-h-10 rounded-xl border border-slate-700 bg-[#070D14] px-3.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none lg:col-span-2"
+                  />
+                  <input
+                    type="text"
+                    required
+                    maxLength={80}
+                    value={newBrand}
+                    onChange={(e) => setNewBrand(e.target.value)}
+                    placeholder="Brand (e.g. Heineken)"
+                    disabled={managerBusy}
+                    className="min-h-10 rounded-xl border border-slate-700 bg-[#070D14] px-3.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
+                  />
+                  <select
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    disabled={managerBusy}
+                    className="min-h-10 rounded-xl border border-slate-700 bg-[#070D14] px-3 text-sm text-slate-100 focus:border-cyan-400 focus:outline-none"
+                  >
+                    {MANAGER_CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      maxLength={40}
+                      value={newSize}
+                      onChange={(e) => setNewSize(e.target.value)}
+                      placeholder="Size (1 L)"
+                      disabled={managerBusy}
+                      className="min-h-10 w-1/2 rounded-xl border border-slate-700 bg-[#070D14] px-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
+                    />
+                    <input
+                      type="number"
+                      required
+                      step="0.01"
+                      min="0.01"
+                      max="10000"
+                      value={newPrice}
+                      onChange={(e) => setNewPrice(e.target.value)}
+                      placeholder="Price"
+                      disabled={managerBusy}
+                      className="min-h-10 w-1/2 rounded-xl border border-slate-700 bg-[#070D14] px-3 font-mono text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={managerBusy}
+                    className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-cyan-400 px-4 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300 disabled:opacity-50"
+                  >
+                    <Plus className="h-4 w-4" aria-hidden="true" />
+                    Add item
+                  </button>
+                </form>
+
+                {managerMessage && (
+                  <p role="status" className="text-sm font-medium text-cyan-300">
+                    {managerMessage}
+                  </p>
+                )}
+                {managerError && (
+                  <p role="alert" className="text-sm text-red-300">
+                    {managerError}
+                  </p>
+                )}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* Store Notice */}
         <div className="mt-6 rounded-2xl border border-slate-800 bg-[#0B1220] px-5 py-3.5 text-sm text-slate-300 flex flex-wrap items-center justify-between gap-3">
           <p className="m-0">
             In-store pricing and cooler stock may vary. 21+ with valid ID required. Need to confirm
@@ -233,10 +499,8 @@ function CoolerDoorPage() {
             </a>
             .
           </p>
-          {catalog?.updatedAt && (
-            <span className="font-mono text-xs text-slate-400">
-              Sheet updated {catalog.updatedAt}
-            </span>
+          {updatedAt && (
+            <span className="font-mono text-xs text-slate-400">Sheet updated {updatedAt}</span>
           )}
         </div>
 
@@ -245,7 +509,6 @@ function CoolerDoorPage() {
           aria-label="Filter Cooler Door inventory"
           className="mt-6 rounded-2xl border border-slate-800 bg-[#0D1624] p-4 sm:p-5"
         >
-          {/* Category Segmented Buttons */}
           <div className="flex flex-wrap items-center gap-2 pb-4 border-b border-slate-800/80">
             {categories.map((category) => {
               const active = selectedCategory.toLowerCase() === category.toLowerCase();
@@ -271,7 +534,6 @@ function CoolerDoorPage() {
             })}
           </div>
 
-          {/* Search, Brand & Sort Row */}
           <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-12">
             <div className="relative md:col-span-6">
               <label htmlFor="cooler-search" className="sr-only">
@@ -344,11 +606,10 @@ function CoolerDoorPage() {
             </div>
           </div>
 
-          {/* Results Summary Bar */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
             <span className="font-mono tabular-nums">
               {loading
-                ? "Reading inventory spreadsheet…"
+                ? "Loading Cooler Door inventory…"
                 : filteredItems.length === 0
                   ? "0 items matching your filters"
                   : `Showing ${startIndex + 1}–${Math.min(startIndex + ITEMS_PER_PAGE, filteredItems.length)} of ${filteredItems.length} items`}
@@ -366,133 +627,22 @@ function CoolerDoorPage() {
           </div>
         </section>
 
-        {/* Inventory Content States */}
+        {/* Liquor Catalog Grid (with Skeleton Loading State) */}
         <section aria-live="polite" className="mt-7">
-          {loading ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 9 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-4 rounded-2xl border border-slate-800/80 bg-[#111B2B]/70 p-5 animate-pulse"
-                >
-                  <div className="h-14 w-14 shrink-0 rounded-xl bg-slate-800" />
-                  <div className="flex-1 space-y-2.5">
-                    <div className="h-3 w-24 rounded bg-slate-800" />
-                    <div className="h-4 w-4/5 rounded bg-slate-700/80" />
-                    <div className="h-4 w-16 rounded bg-cyan-950/80" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : error ? (
-            <div className="rounded-2xl border border-red-900/60 bg-red-950/20 p-8 text-center">
-              <h2 className="font-display text-xl font-bold text-slate-100">
-                Could not load inventory spreadsheet
-              </h2>
-              <p className="mx-auto mt-2 max-w-md text-sm text-slate-400">
-                {error} Please try again or call us at{" "}
-                <a href={`tel:${STORE.telephone}`} className="text-cyan-300 underline">
-                  {STORE.telephoneDisplay}
-                </a>
-                .
-              </p>
-              <button
-                type="button"
-                onClick={() => fetchInventory(true)}
-                className="mt-5 inline-flex min-h-11 cursor-pointer items-center justify-center rounded-xl bg-cyan-400 px-5 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
-              >
-                Retry loading
-              </button>
-            </div>
-          ) : pageItems.length === 0 ? (
-            <div className="rounded-2xl border border-slate-800 bg-[#111B2B] p-10 text-center">
-              <h2 className="font-display text-xl font-bold text-slate-100">
-                No matching drinks found
-              </h2>
-              <p className="mx-auto mt-2 max-w-md text-sm text-slate-400">
-                Try clearing your search or switching back to all categories to see every item in
-                the Cooler Door.
-              </p>
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="mt-5 inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
-              >
-                <RotateCcw className="h-4 w-4" aria-hidden="true" />
-                Reset filters
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {pageItems.map((item) => (
-                  <article
-                    key={item.id}
-                    className="flex items-start gap-4 rounded-2xl border border-slate-800 bg-[#111B2B] p-5 transition-colors hover:border-cyan-400/50 hover:bg-[#162235]"
-                  >
-                    <BrandLogo
-                      brand={item.brand}
-                      size={56}
-                      showFallbackBadge
-                      className="shrink-0"
-                    />
-                    <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
-                      <div>
-                        <p className="text-xs font-medium text-slate-400">
-                          {item.category} · {item.brand}
-                        </p>
-                        <h2 className="mt-1 font-display text-base font-bold leading-snug text-slate-100">
-                          {item.name}
-                        </h2>
-                      </div>
-                      <div className="mt-1 flex items-baseline justify-between gap-2 pt-2 border-t border-slate-800/80">
-                        <span className="font-mono text-xs text-slate-400">
-                          {item.size || "In store"}
-                        </span>
-                        <span className="font-mono text-lg font-bold tabular-nums text-cyan-300">
-                          {formatPrice(item.price)}
-                        </span>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <nav
-                  aria-label="Inventory pages"
-                  className="mt-8 flex items-center justify-center gap-3"
-                >
-                  <button
-                    type="button"
-                    disabled={safePage <= 1}
-                    onClick={() => {
-                      setPage((p) => Math.max(1, p - 1));
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className="min-h-10 cursor-pointer rounded-xl border border-slate-700 bg-[#111B2B] px-4 text-sm font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    ← Previous
-                  </button>
-                  <span className="font-mono text-xs tabular-nums text-slate-400">
-                    Page {safePage} of {totalPages}
-                  </span>
-                  <button
-                    type="button"
-                    disabled={safePage >= totalPages}
-                    onClick={() => {
-                      setPage((p) => Math.min(totalPages, p + 1));
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className="min-h-10 cursor-pointer rounded-xl border border-slate-700 bg-[#111B2B] px-4 text-sm font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    Next →
-                  </button>
-                </nav>
-              )}
-            </>
-          )}
+          <LiquorCatalog
+            items={pageItems}
+            loading={loading}
+            error={error}
+            skeletonCount={12}
+            page={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            onRetry={() => void refresh(true)}
+            onResetFilters={resetFilters}
+            canDelete={managerOpen && isAdmin && usingDatabase}
+            deleteDisabled={managerBusy}
+            onDeleteItem={(id, name) => void handleDeleteItem(id, name)}
+          />
         </section>
       </main>
 
