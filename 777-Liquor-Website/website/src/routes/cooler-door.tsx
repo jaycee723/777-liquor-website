@@ -1,33 +1,32 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Download,
-  Lock,
-  LogOut,
-  Plus,
-  RotateCcw,
-  Search,
-  SlidersHorizontal,
-  Upload,
-} from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import { useFirebaseAuth } from "../lib/firebase-auth-context";
+import { Download, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { KegModal } from "../components/KegModal";
 import { LiquorCatalog } from "../components/LiquorCatalog";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteHeader } from "../components/SiteHeader";
-import { useInventory } from "../hooks/useInventory";
-import {
-  INVENTORY_FILE_URL,
-  loadCoolerDoorInventory,
-  parseInventoryWorkbook,
-} from "../lib/inventory";
+import { INVENTORY_FILE_URL, type InventoryItem } from "../lib/inventory";
 import { STORE } from "../lib/store-info";
-import {
-  deleteCoolerItem,
-  saveCoolerItem,
-  syncInventoryToFirestore,
-} from "../services/inventory.service";
+import catalogData from "../data/cooler-door-items.json";
 import "../home-refresh.css";
+
+/**
+ * The Cooler Door catalog is generated from the inventory spreadsheet filed
+ * in this repository (public/inventory/cooler-door-inventory.xlsx) by
+ * scripts/sync_cooler_door.py, which runs in GitHub Actions whenever the
+ * spreadsheet changes. The page mirrors the sheet exactly — alcoholic
+ * beverages and liquor only, with each item's price and brand logo.
+ */
+const CATALOG_ITEMS: InventoryItem[] = (catalogData.items as InventoryItem[]).map((item) => ({
+  id: item.id,
+  name: item.name,
+  brand: item.brand,
+  category: item.category,
+  size: item.size,
+  price: item.price,
+}));
+const CATALOG_UPDATED_AT: string | null = catalogData.generatedAt ?? null;
+const CATEGORY_ORDER = ["Beer", "RTD", "Spirits", "Wine"];
 
 type CoolerDoorSearch = {
   category?: string;
@@ -58,21 +57,24 @@ export const Route = createFileRoute("/cooler-door")({
 
 type SortOption = "name-asc" | "price-asc" | "price-desc";
 const ITEMS_PER_PAGE = 48;
-const MANAGER_CATEGORIES = ["Beer", "RTD", "Spirits", "Wine", "Beverages"] as const;
-
-function formatPrice(price: number): string {
-  return `$${price.toFixed(2)}`;
-}
 
 function CoolerDoorPage() {
   const initialSearch = Route.useSearch();
-  const { user, isAdmin, signInWithGoogle, signOutUser } = useFirebaseAuth();
-  const { items, categories, source, updatedAt, loading, error, refresh } = useInventory({
-    realtime: true,
-    includeExcelFallback: true,
-  });
 
-  const usingDatabase = source === "firestore";
+  const items = CATALOG_ITEMS;
+  const updatedAt = CATALOG_UPDATED_AT;
+  const loading = false;
+  const error: string | null = null;
+
+  const categories = useMemo(() => {
+    const present = Array.from(new Set(items.map((item) => item.category)));
+    present.sort(
+      (a, b) =>
+        (CATEGORY_ORDER.indexOf(a) === -1 ? 99 : CATEGORY_ORDER.indexOf(a)) -
+          (CATEGORY_ORDER.indexOf(b) === -1 ? 99 : CATEGORY_ORDER.indexOf(b)) || a.localeCompare(b),
+    );
+    return ["All", ...present];
+  }, [items]);
 
   const [query, setQuery] = useState(initialSearch.q ?? "");
   const [selectedCategory, setSelectedCategory] = useState(initialSearch.category ?? "All");
@@ -82,18 +84,6 @@ function CoolerDoorPage() {
 
   const [showKeg, setShowKeg] = useState(false);
   const openerRef = useRef<HTMLElement | null>(null);
-
-  // Store Manager Panel State
-  const [managerOpen, setManagerOpen] = useState(false);
-  const [managerBusy, setManagerBusy] = useState(false);
-  const [managerMessage, setManagerMessage] = useState<string | null>(null);
-  const [managerError, setManagerError] = useState<string | null>(null);
-  const [newName, setNewName] = useState("");
-  const [newBrand, setNewBrand] = useState("");
-  const [newCategory, setNewCategory] = useState<string>("Beer");
-  const [newSize, setNewSize] = useState("");
-  const [newPrice, setNewPrice] = useState("");
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Keep local filter synced when navigating here with query params
   useEffect(() => {
@@ -175,102 +165,6 @@ function CoolerDoorPage() {
     setPage(1);
   };
 
-  const handleSignIn = async () => {
-    setManagerError(null);
-    setManagerMessage(null);
-    try {
-      await signInWithGoogle();
-    } catch {
-      setManagerError("Sign-in was cancelled or blocked. Please try again.");
-    }
-  };
-
-  const handleSyncDefaultExcel = async () => {
-    if (!user || !isAdmin) return;
-    setManagerBusy(true);
-    setManagerError(null);
-    setManagerMessage(null);
-    try {
-      const excelCatalog = await loadCoolerDoorInventory(true);
-      const count = await syncInventoryToFirestore(excelCatalog.items, user.uid);
-      setManagerMessage(`Synced ${count} items from cooler-door-inventory.xlsx.`);
-    } catch (err) {
-      setManagerError(
-        err instanceof Error ? err.message : "Could not sync the Excel sheet right now.",
-      );
-    } finally {
-      setManagerBusy(false);
-    }
-  };
-
-  const handleExcelUpload = async (file: File | undefined) => {
-    if (!file || !user || !isAdmin) return;
-    setManagerBusy(true);
-    setManagerError(null);
-    setManagerMessage(null);
-    try {
-      const buffer = await file.arrayBuffer();
-      const parsed = parseInventoryWorkbook(buffer, file.name);
-      if (!parsed.items.length) {
-        throw new Error("No valid product and price rows were found in that spreadsheet.");
-      }
-      const count = await syncInventoryToFirestore(parsed.items, user.uid);
-      setManagerMessage(`Imported ${count} normalized items from ${file.name}.`);
-    } catch (err) {
-      setManagerError(
-        err instanceof Error ? err.message : "Could not import that Excel spreadsheet.",
-      );
-    } finally {
-      setManagerBusy(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
-  };
-
-  const handleAddItem = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!user || !isAdmin) return;
-    setManagerBusy(true);
-    setManagerError(null);
-    setManagerMessage(null);
-    try {
-      const parsedPrice = Number.parseFloat(newPrice);
-      const saved = await saveCoolerItem(
-        {
-          name: newName,
-          brand: newBrand,
-          category: newCategory,
-          size: newSize,
-          price: parsedPrice,
-        },
-        user.uid,
-      );
-      setNewName("");
-      setNewBrand("");
-      setNewSize("");
-      setNewPrice("");
-      setManagerMessage(`Saved "${saved.name}" (${formatPrice(saved.price)}).`);
-    } catch (err) {
-      setManagerError(err instanceof Error ? err.message : "Could not save item.");
-    } finally {
-      setManagerBusy(false);
-    }
-  };
-
-  const handleDeleteItem = async (itemId: string, itemName: string) => {
-    if (!user || !isAdmin || !usingDatabase) return;
-    setManagerBusy(true);
-    setManagerError(null);
-    setManagerMessage(null);
-    try {
-      await deleteCoolerItem(itemId);
-      setManagerMessage(`Removed "${itemName}".`);
-    } catch (err) {
-      setManagerError(err instanceof Error ? err.message : "Could not remove item.");
-    } finally {
-      setManagerBusy(false);
-    }
-  };
-
   return (
     <div className="min-h-dvh bg-[#070D14] text-slate-100 flex flex-col">
       <SiteHeader
@@ -311,180 +205,8 @@ function CoolerDoorPage() {
               <Download className="h-4 w-4 text-cyan-400" aria-hidden="true" />
               Excel sheet (.xlsx)
             </a>
-            <button
-              type="button"
-              onClick={() => setManagerOpen((open) => !open)}
-              aria-expanded={managerOpen}
-              className={`inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border px-4 text-sm font-medium transition ${
-                managerOpen
-                  ? "border-cyan-400 bg-cyan-400/10 text-cyan-300"
-                  : "border-slate-700 bg-[#0B1220] text-slate-300 hover:border-cyan-400 hover:text-cyan-300"
-              }`}
-            >
-              <Lock className="h-4 w-4 text-cyan-400" aria-hidden="true" />
-              Manage inventory
-            </button>
           </div>
         </section>
-
-        {/* Store Manager Panel */}
-        {managerOpen && (
-          <section
-            aria-label="Store inventory manager"
-            className="mt-6 rounded-2xl border border-slate-800 bg-[#0D1624] p-5 sm:p-6"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
-              <div>
-                <h2 className="font-display text-lg font-bold text-slate-100">
-                  Store Inventory Manager
-                </h2>
-                <p className="mt-1 text-sm text-slate-400">
-                  Upload an Excel (.xlsx) inventory sheet or add individual items. Product names and
-                  sizes are normalized automatically (e.g. 11oz, 1 L).
-                </p>
-              </div>
-              {user ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-400">{user.email}</span>
-                  <button
-                    type="button"
-                    onClick={() => void signOutUser()}
-                    className="inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-lg border border-slate-700 bg-[#111B2B] px-3 text-xs font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
-                  >
-                    <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-                    Sign out
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => void handleSignIn()}
-                  className="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-xl bg-cyan-400 px-5 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
-                >
-                  Sign in with Google
-                </button>
-              )}
-            </div>
-
-            {user && !isAdmin && (
-              <p className="mt-4 text-sm text-amber-300">
-                Signed in as {user.email}. Only the authorized store owner account can update Cooler
-                Door inventory.
-              </p>
-            )}
-
-            {user && isAdmin && (
-              <div className="mt-5 space-y-6">
-                <div className="flex flex-wrap items-center gap-3">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".xlsx,.xls,.csv"
-                    className="sr-only"
-                    id="excel-upload-input"
-                    disabled={managerBusy}
-                    onChange={(e) => void handleExcelUpload(e.target.files?.[0])}
-                  />
-                  <label
-                    htmlFor="excel-upload-input"
-                    className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl bg-cyan-400 px-4 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
-                  >
-                    <Upload className="h-4 w-4" aria-hidden="true" />
-                    Upload Excel (.xlsx) file
-                  </label>
-                  <button
-                    type="button"
-                    disabled={managerBusy}
-                    onClick={() => void handleSyncDefaultExcel()}
-                    className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#111B2B] px-4 text-sm font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300 disabled:opacity-50"
-                  >
-                    Sync default inventory sheet
-                  </button>
-                </div>
-
-                <form
-                  onSubmit={(e) => void handleAddItem(e)}
-                  className="grid grid-cols-1 gap-3 border-t border-slate-800/80 pt-5 sm:grid-cols-2 lg:grid-cols-6"
-                >
-                  <input
-                    type="text"
-                    required
-                    maxLength={140}
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    placeholder="Product Name (e.g. Heineken 12pk 12oz)"
-                    disabled={managerBusy}
-                    className="min-h-10 rounded-xl border border-slate-700 bg-[#070D14] px-3.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none lg:col-span-2"
-                  />
-                  <input
-                    type="text"
-                    required
-                    maxLength={80}
-                    value={newBrand}
-                    onChange={(e) => setNewBrand(e.target.value)}
-                    placeholder="Brand (e.g. Heineken)"
-                    disabled={managerBusy}
-                    className="min-h-10 rounded-xl border border-slate-700 bg-[#070D14] px-3.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
-                  />
-                  <select
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    disabled={managerBusy}
-                    className="min-h-10 rounded-xl border border-slate-700 bg-[#070D14] px-3 text-sm text-slate-100 focus:border-cyan-400 focus:outline-none"
-                  >
-                    {MANAGER_CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      maxLength={40}
-                      value={newSize}
-                      onChange={(e) => setNewSize(e.target.value)}
-                      placeholder="Size (1 L)"
-                      disabled={managerBusy}
-                      className="min-h-10 w-1/2 rounded-xl border border-slate-700 bg-[#070D14] px-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
-                    />
-                    <input
-                      type="number"
-                      required
-                      step="0.01"
-                      min="0.01"
-                      max="10000"
-                      value={newPrice}
-                      onChange={(e) => setNewPrice(e.target.value)}
-                      placeholder="Price"
-                      disabled={managerBusy}
-                      className="min-h-10 w-1/2 rounded-xl border border-slate-700 bg-[#070D14] px-3 font-mono text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={managerBusy}
-                    className="inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-cyan-400 px-4 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300 disabled:opacity-50"
-                  >
-                    <Plus className="h-4 w-4" aria-hidden="true" />
-                    Add item
-                  </button>
-                </form>
-
-                {managerMessage && (
-                  <p role="status" className="text-sm font-medium text-cyan-300">
-                    {managerMessage}
-                  </p>
-                )}
-                {managerError && (
-                  <p role="alert" className="text-sm text-red-300">
-                    {managerError}
-                  </p>
-                )}
-              </div>
-            )}
-          </section>
-        )}
 
         {/* Store Notice */}
         <div className="mt-6 rounded-2xl border border-slate-800 bg-[#0B1220] px-5 py-3.5 text-sm text-slate-300 flex flex-wrap items-center justify-between gap-3">
@@ -500,7 +222,9 @@ function CoolerDoorPage() {
             .
           </p>
           {updatedAt && (
-            <span className="font-mono text-xs text-slate-400">Sheet updated {updatedAt}</span>
+            <span className="font-mono text-xs text-slate-400">
+              Synced from the inventory sheet · {updatedAt}
+            </span>
           )}
         </div>
 
@@ -637,7 +361,6 @@ function CoolerDoorPage() {
             page={safePage}
             totalPages={totalPages}
             onPageChange={setPage}
-            onRetry={() => void refresh(true)}
             onResetFilters={resetFilters}
             onSelectBrand={(brand) => {
               setSelectedCategory("All");
@@ -645,9 +368,6 @@ function CoolerDoorPage() {
               setQuery("");
               setPage(1);
             }}
-            canDelete={managerOpen && isAdmin && usingDatabase}
-            deleteDisabled={managerBusy}
-            onDeleteItem={(id, name) => void handleDeleteItem(id, name)}
           />
         </section>
       </main>
