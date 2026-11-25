@@ -11,7 +11,7 @@ import {
   type QuerySnapshot,
   type Unsubscribe,
 } from "firebase/firestore";
-import { db, handleFirestoreError, OperationType } from "../lib/firebase";
+import { getDb, handleFirestoreError, OperationType } from "../lib/firebase";
 import {
   deleteCoolerItem,
   saveCoolerItem,
@@ -86,7 +86,7 @@ function mapSnapshotToItems(snapshot: QuerySnapshot<DocumentData>): InventoryIte
 }
 
 function buildPublicInventoryQuery(category?: string) {
-  const baseCollection = collection(db, COOLER_ITEMS_PATH);
+  const baseCollection = collection(getDb(), COOLER_ITEMS_PATH);
   const normalizedCategory =
     category && category !== "All" ? normalizeCategory(category) : undefined;
 
@@ -132,7 +132,7 @@ export async function fetchInventoryItemDetail(
   for (const safeId of candidateIds) {
     const docPath = `${COOLER_ITEMS_PATH}/${safeId}`;
     try {
-      const docSnap = await getDoc(doc(db, COOLER_ITEMS_PATH, safeId));
+      const docSnap = await getDoc(doc(getDb(), COOLER_ITEMS_PATH, safeId));
       if (docSnap.exists()) {
         const data = docSnap.data();
         return {
