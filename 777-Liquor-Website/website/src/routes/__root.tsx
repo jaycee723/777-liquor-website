@@ -6,20 +6,16 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { button } from "@higgsfield/quanta/button";
-import { NotFound } from "@higgsfield/quanta/not-found";
 
 import appCss from "../styles.css?url";
+import { FirebaseProvider } from "../components/FirebaseProvider";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
 import { SEO_DESCRIPTION, SEO_TITLE, STORE, localBusinessJsonLd } from "../lib/store-info";
-// Page metadata (browser <title>/favicon + social og: tags) committed into the
-// repo by the marketplace meta API and read at BUILD time — no runtime fetch.
-// Editing it via the app settings UI rewrites this file and redeploys the app.
 import appMetaJson from "../app-meta.json";
 
-// Optional Google Analytics 4 (set VITE_GA_MEASUREMENT_ID, e.g. G-XXXXXXXXXX, at build time).
 const GA_ID = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) || "";
 
 type AppMeta = {
@@ -31,33 +27,23 @@ type AppMeta = {
 };
 
 const appMeta = appMetaJson as AppMeta;
-
-// favicon/og images live in THIS app's own /assets, so the host is never
-// inherent. app-meta.json may carry an absolute higgsfield-app URL with a STALE
-// host — baked from the app this one was copied/remixed/renamed from — which would
-// serve the wrong app's favicon/og. Strip any higgsfield-app host (prod
-// higgsfield.app + dev higgsfield-dev.app) down to a root-relative path so it
-// always resolves against whoever serves THIS page (preview / prod / custom
-// domain). Genuinely external URLs (a CDN image the owner set) are left absolute.
 const APP_HOST_ZONES = ["higgsfield.app", "higgsfield-dev.app"];
 
 function toOwnAssetUrl(value: string | null | undefined): string | null {
   if (!value) return null;
-  if (value.startsWith("/")) return value; // already root-relative
+  if (value.startsWith("/")) return value;
   try {
     const u = new URL(value);
     const isAppHost = APP_HOST_ZONES.some(
       (zone) => u.hostname === zone || u.hostname.endsWith(`.${zone}`),
     );
     if (isAppHost) return u.pathname + u.search;
-    return value; // external host (CDN, etc.) — keep absolute
+    return value;
   } catch {
-    return value; // not a parseable URL — leave as-is
+    return value;
   }
 }
 
-// Build the document head. Title/description are set for local SEO (store name,
-// category and city); the og image/favicon still come from app-meta.json.
 function buildHead(meta: AppMeta) {
   const title = SEO_TITLE;
   const description = SEO_DESCRIPTION;
@@ -71,6 +57,7 @@ function buildHead(meta: AppMeta) {
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title },
       { name: "description", content: description },
+      { name: "theme-color", content: "#070D14" },
       { name: "author", content: STORE.shortName },
       { name: "robots", content: "index,follow,max-image-preview:large" },
       { property: "og:title", content: title },
@@ -88,8 +75,6 @@ function buildHead(meta: AppMeta) {
             { name: "twitter:image", content: ogImage },
           ]
         : []),
-      // Cover video (og:video) — the animated counterpart of og:image; the
-      // Higgsfield feed cards also play it on hover.
       ...(ogVideo ? [{ property: "og:video", content: ogVideo }] : []),
     ],
     links: [
@@ -114,22 +99,33 @@ function buildHead(meta: AppMeta) {
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-q-background-primary px-4">
-      <NotFound
-        className="mx-auto max-w-md"
-        icon={<span className="text-q-title-md-semi-bold text-q-text-primary">404</span>}
-        title="Page not found"
-        subtitle="The page you're looking for doesn't exist or has been moved."
-      >
-        <Link to="/" className={button({ variant: "primary", size: "md" }, "mt-3")}>
-          Go home
-        </Link>
-      </NotFound>
+    <div className="flex min-h-dvh items-center justify-center bg-[#070D14] px-6 text-slate-100">
+      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-[#111B2B] p-8 text-center">
+        <p className="font-mono text-sm font-semibold tracking-widest text-cyan-400">404</p>
+        <h1 className="mt-2 font-display text-2xl font-bold text-slate-100">Page not found</h1>
+        <p className="mt-2 text-sm text-slate-400">
+          The page you are looking for does not exist or has been moved.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link
+            to="/"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-cyan-400 px-5 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
+          >
+            Go home
+          </Link>
+          <Link
+            to="/cooler-door"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-700 bg-[#0B1220] px-5 text-sm font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+          >
+            Cooler Door
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -137,23 +133,27 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-q-background-primary px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-q-title-lg-semi-bold text-q-text-primary">This page didn't load</h1>
-        <p className="mt-2 text-q-body-sm-regular text-q-text-secondary">
+    <div className="flex min-h-dvh items-center justify-center bg-[#070D14] px-6 text-slate-100">
+      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-[#111B2B] p-8 text-center">
+        <h1 className="font-display text-2xl font-bold text-slate-100">This page didn't load</h1>
+        <p className="mt-2 text-sm text-slate-400">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
+            type="button"
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className={button({ variant: "primary", size: "md" })}
+            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-xl bg-cyan-400 px-5 text-sm font-bold text-[#06131D] transition hover:bg-cyan-300"
           >
             Try again
           </button>
-          <a href="/" className={button({ variant: "outline", size: "md" })}>
+          <a
+            href="/"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-700 bg-[#0B1220] px-5 text-sm font-semibold text-slate-200 transition hover:border-cyan-400 hover:text-cyan-300"
+          >
             Go home
           </a>
         </div>
@@ -163,7 +163,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  // Read the committed page metadata at build time (no runtime fetch).
   head: () => buildHead(appMeta),
   shellComponent: RootShell,
   component: RootComponent,
@@ -173,14 +172,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="default-dark" style={{ colorScheme: "dark" }}>
-      {/* Marketplace apps are permanently dark: data-theme is pinned on <html>
-          above. Do not add quanta's bootstrapScript/ThemeController, a theme
-          toggle, or a light mode. */}
+    <html
+      lang="en"
+      className="dark"
+      data-theme="default-dark"
+      style={{ colorScheme: "dark" }}
+      suppressHydrationWarning
+    >
       <head>
         <HeadContent />
       </head>
-      <body className="bg-q-background-primary text-q-text-primary">
+      <body className="min-h-dvh bg-[#070D14] text-slate-100 antialiased" suppressHydrationWarning>
         {children}
         <Scripts />
       </body>
@@ -193,8 +195,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <FirebaseProvider>
+        <Outlet />
+      </FirebaseProvider>
     </QueryClientProvider>
   );
 }

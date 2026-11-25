@@ -1,0 +1,215 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Deny all unspecified paths by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // Global Hardened Primitives
+    // =========================================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Bootstrapped store owner email (verified) OR trusted /admins/{uid} document.
+    function isBootstrappedAdmin() {
+      return isVerifiedUser() && request.auth.token.email == '777liquorstorehi@gmail.com';
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin() ||
+        (isVerifiedUser() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    // =========================================================================
+    // Validation Blueprints (Anti-Update-Gap)
+    // =========================================================================
+
+    function isValidCoolerItem(data) {
+      return data.keys().hasAll([
+          'name',
+          'brand',
+          'category',
+          'size',
+          'price',
+          'visibility',
+          'updatedBy',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'name',
+          'brand',
+          'category',
+          'size',
+          'price',
+          'visibility',
+          'updatedBy',
+          'updatedAt'
+        ]) &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 140 &&
+        data.brand is string && data.brand.size() >= 1 && data.brand.size() <= 80 &&
+        data.category is string && data.category.size() >= 1 && data.category.size() <= 40 &&
+        data.category in ['Beer', 'RTD', 'Spirits', 'Wine', 'Beverages'] &&
+        data.size is string && data.size.size() <= 40 &&
+        (data.price is int || data.price is float) && data.price > 0 && data.price <= 10000 &&
+        data.visibility is string && data.visibility.size() <= 16 &&
+        data.visibility in ['public', 'hidden'] &&
+        isValidId(data.updatedBy) &&
+        data.updatedBy == request.auth.uid &&
+        data.updatedAt is timestamp &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidAdminUser(data, adminUid) {
+      return data.keys().hasAll(['uid', 'email', 'role', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'role', 'createdAt']) &&
+        isValidId(data.uid) &&
+        data.uid == adminUid &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 160 &&
+        data.role is string && data.role.size() <= 16 && data.role == 'admin' &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidKegInquiry(data) {
+      return data.keys().hasAll([
+          'userId',
+          'name',
+          'phone',
+          'brand',
+          'pickupDay',
+          'notes',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'userId',
+          'name',
+          'phone',
+          'brand',
+          'pickupDay',
+          'notes',
+          'status',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        isValidId(data.userId) &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 7 && data.phone.size() <= 40 &&
+        data.brand is string && data.brand.size() >= 1 && data.brand.size() <= 100 &&
+        data.pickupDay is string && data.pickupDay.size() <= 16 &&
+        data.pickupDay in ['Wednesday', 'Friday'] &&
+        data.notes is string && data.notes.size() <= 2000 &&
+        data.status is string && data.status.size() <= 20 &&
+        data.status in ['submitted', 'confirmed', 'cancelled'] &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp &&
+        data.updatedAt == request.time;
+    }
+
+    // =========================================================================
+    // Collection Rules
+    // =========================================================================
+
+    // Cooler Door Beverage Catalog (public storefront menu, admin-only writes)
+    match /coolerItems/{itemId} {
+      allow get: if isValidId(itemId) && (existing().visibility == 'public' || isAdmin());
+      allow list: if existing().visibility == 'public' || isBootstrappedAdmin();
+      allow create: if isVerifiedUser() &&
+        isValidId(itemId) &&
+        isValidCoolerItem(incoming()) &&
+        isAdmin();
+      allow update: if isVerifiedUser() &&
+        isValidId(itemId) &&
+        isValidCoolerItem(incoming()) &&
+        isAdmin() &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'name',
+          'brand',
+          'category',
+          'size',
+          'price',
+          'visibility',
+          'updatedBy',
+          'updatedAt'
+        ]);
+      allow delete: if isVerifiedUser() && isValidId(itemId) && isAdmin();
+    }
+
+    // Store Administrators (PII isolated to owner & bootstrapped store owner)
+    match /admins/{adminUid} {
+      allow get: if isValidId(adminUid) && (isOwner(adminUid) || isBootstrappedAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create: if isBootstrappedAdmin() &&
+        isValidId(adminUid) &&
+        isValidAdminUser(incoming(), adminUid) &&
+        incoming().createdAt == request.time;
+      allow update: if isBootstrappedAdmin() &&
+        isValidId(adminUid) &&
+        isValidAdminUser(incoming(), adminUid) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['email', 'role']);
+      allow delete: if isBootstrappedAdmin() && isValidId(adminUid);
+    }
+
+    // Private Customer Keg Inquiries (PII isolated to owner & store admins)
+    match /kegInquiries/{inquiryId} {
+      allow get: if isSignedIn() &&
+        isValidId(inquiryId) &&
+        (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() &&
+        (existing().userId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isVerifiedUser() &&
+        isValidId(inquiryId) &&
+        isValidKegInquiry(incoming()) &&
+        incoming().userId == request.auth.uid &&
+        incoming().status == 'submitted' &&
+        incoming().createdAt == request.time;
+      allow update: if isVerifiedUser() &&
+        isValidId(inquiryId) &&
+        isValidKegInquiry(incoming()) &&
+        incoming().userId == existing().userId &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          // Action 1: Admin manages inquiry status or internal notes
+          (
+            isAdmin() &&
+            incoming().diff(existing()).affectedKeys().hasOnly(['status', 'notes', 'updatedAt'])
+          ) ||
+          // Action 2: Customer cancels their own open inquiry (blocked once terminal)
+          (
+            existing().userId == request.auth.uid &&
+            existing().status == 'submitted' &&
+            incoming().status == 'cancelled' &&
+            incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+          )
+        );
+      allow delete: if isVerifiedUser() && isValidId(inquiryId) && isAdmin();
+    }
+  }
+}
