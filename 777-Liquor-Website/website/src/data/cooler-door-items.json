@@ -1,0 +1,394 @@
+{
+  "sourceFile": "cooler-door-inventory.xlsx",
+  "generatedAt": "November 25, 2026",
+  "itemCount": 43,
+  "items": [
+    {
+      "id": "aloha-beer-co-aloha-beer-co-hop-lei-ipa-6pk-12oz-cans",
+      "name": "Aloha Beer Co. Hop Lei IPA 6pk 12oz Cans",
+      "brand": "Aloha Beer Co.",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 13.49,
+      "logo": "/images/brands/aloha-beer.png"
+    },
+    {
+      "id": "asahi-super-dry-asahi-super-dry-6pk-12oz-cans",
+      "name": "Asahi Super Dry 6pk 12oz Cans",
+      "brand": "Asahi Super Dry",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 12.99,
+      "logo": "/images/brands/asahi.svg"
+    },
+    {
+      "id": "bud-light-bud-light-12pk-12oz-cans",
+      "name": "Bud Light 12pk 12oz Cans",
+      "brand": "Bud Light",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 15.99,
+      "logo": "/images/brands/bud-light.png"
+    },
+    {
+      "id": "bud-light-bud-light-24pk-12oz-case",
+      "name": "Bud Light 24pk 12oz Case",
+      "brand": "Bud Light",
+      "category": "Beer",
+      "size": "24pk 12oz",
+      "price": 27.99,
+      "logo": "/images/brands/bud-light.png"
+    },
+    {
+      "id": "budweiser-budweiser-12pk-12oz-cans",
+      "name": "Budweiser 12pk 12oz Cans",
+      "brand": "Budweiser",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 15.99,
+      "logo": "/images/brands/budweiser.svg"
+    },
+    {
+      "id": "coors-banquet-coors-banquet-6pk-12oz-stubby-bottles",
+      "name": "Coors Banquet 6pk 12oz Stubby Bottles",
+      "brand": "Coors Banquet",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 10.49,
+      "logo": "/images/brands/coors.svg"
+    },
+    {
+      "id": "coors-light-coors-light-12pk-12oz-cans",
+      "name": "Coors Light 12pk 12oz Cans",
+      "brand": "Coors Light",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 15.99,
+      "logo": "/images/brands/coors-light.svg"
+    },
+    {
+      "id": "corona-extra-corona-extra-12pk-12oz-bottles",
+      "name": "Corona Extra 12pk 12oz Bottles",
+      "brand": "Corona Extra",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 19.99,
+      "logo": "/images/brands/corona.svg"
+    },
+    {
+      "id": "corona-extra-corona-extra-6pk-12oz-cans",
+      "name": "Corona Extra 6pk 12oz Cans",
+      "brand": "Corona Extra",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 11.99,
+      "logo": "/images/brands/corona.svg"
+    },
+    {
+      "id": "guinness-guinness-draught-4pk-14-9oz-cans",
+      "name": "Guinness Draught 4pk 14.9oz Cans",
+      "brand": "Guinness",
+      "category": "Beer",
+      "size": "4pk 14.9oz",
+      "price": 11.99,
+      "logo": "/images/brands/guinness.png"
+    },
+    {
+      "id": "heineken-heineken-lager-12pk-12oz-bottles",
+      "name": "Heineken Lager 12pk 12oz Bottles",
+      "brand": "Heineken",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 19.99,
+      "logo": "/images/brands/heineken.svg"
+    },
+    {
+      "id": "heineken-heineken-silver-6pk-12oz-cans",
+      "name": "Heineken Silver 6pk 12oz Cans",
+      "brand": "Heineken",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 11.49,
+      "logo": "/images/brands/heineken.svg"
+    },
+    {
+      "id": "kirin-ichiban-kirin-ichiban-6pk-12oz-bottles",
+      "name": "Kirin Ichiban 6pk 12oz Bottles",
+      "brand": "Kirin Ichiban",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 12.49,
+      "logo": "/images/brands/kirin.svg"
+    },
+    {
+      "id": "kona-brewing-kona-big-wave-golden-ale-6pk-12oz-cans",
+      "name": "Kona Big Wave Golden Ale 6pk 12oz Cans",
+      "brand": "Kona Brewing",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 12.49,
+      "logo": "/images/brands/big-wave.png"
+    },
+    {
+      "id": "michelob-ultra-michelob-ultra-12pk-12oz-slim-cans",
+      "name": "Michelob ULTRA 12pk 12oz Slim Cans",
+      "brand": "Michelob ULTRA",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 17.99,
+      "logo": "/images/brands/michelob-ultra.png"
+    },
+    {
+      "id": "miller-lite-miller-lite-12pk-12oz-cans",
+      "name": "Miller Lite 12pk 12oz Cans",
+      "brand": "Miller Lite",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 15.99,
+      "logo": "/images/brands/miller-lite.png"
+    },
+    {
+      "id": "modelo-especial-modelo-especial-12pk-12oz-cans",
+      "name": "Modelo Especial 12pk 12oz Cans",
+      "brand": "Modelo Especial",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 19.99,
+      "logo": "/images/brands/modelo.png"
+    },
+    {
+      "id": "modelo-especial-modelo-especial-24oz-single-can",
+      "name": "Modelo Especial 24oz Single Can",
+      "brand": "Modelo Especial",
+      "category": "Beer",
+      "size": "24oz",
+      "price": 3.99,
+      "logo": "/images/brands/modelo.png"
+    },
+    {
+      "id": "pabst-blue-ribbon-pabst-blue-ribbon-12pk-12oz-cans",
+      "name": "Pabst Blue Ribbon 12pk 12oz Cans",
+      "brand": "Pabst Blue Ribbon",
+      "category": "Beer",
+      "size": "12pk 12oz",
+      "price": 12.99,
+      "logo": "/images/brands/pabst-blue-ribbon.png"
+    },
+    {
+      "id": "pacifico-pacifico-clara-6pk-12oz-bottles",
+      "name": "Pacifico Clara 6pk 12oz Bottles",
+      "brand": "Pacifico",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 11.99,
+      "logo": "/images/brands/pacifico.png"
+    },
+    {
+      "id": "sapporo-sapporo-premium-22oz-silver-can",
+      "name": "Sapporo Premium 22oz Silver Can",
+      "brand": "Sapporo",
+      "category": "Beer",
+      "size": "22oz",
+      "price": 4.49,
+      "logo": "/images/brands/sapporo.svg"
+    },
+    {
+      "id": "sierra-nevada-pale-ale-sierra-nevada-pale-ale-6pk-12oz-cans",
+      "name": "Sierra Nevada Pale Ale 6pk 12oz Cans",
+      "brand": "Sierra Nevada Pale Ale",
+      "category": "Beer",
+      "size": "6pk 12oz",
+      "price": 12.99,
+      "logo": "/images/brands/sierra-nevada.svg"
+    },
+    {
+      "id": "stella-artois-stella-artois-6pk-11oz-bottles",
+      "name": "Stella Artois 6pk 11oz Bottles",
+      "brand": "Stella Artois",
+      "category": "Beer",
+      "size": "6pk 11oz",
+      "price": 12.49,
+      "logo": "/images/brands/stella-artois.png"
+    },
+    {
+      "id": "cutwater-cutwater-lime-margarita-4pk-12oz-cans",
+      "name": "Cutwater Lime Margarita 4pk 12oz Cans",
+      "brand": "Cutwater",
+      "category": "RTD",
+      "size": "4pk 12oz",
+      "price": 14.99,
+      "logo": "/images/brands/cutwater.png"
+    },
+    {
+      "id": "high-noon-high-noon-vodka-soda-variety-8pk-12oz-cans",
+      "name": "High Noon Vodka Soda Variety 8pk 12oz Cans",
+      "brand": "High Noon",
+      "category": "RTD",
+      "size": "8pk 12oz",
+      "price": 21.99,
+      "logo": "/images/brands/high-noon.png"
+    },
+    {
+      "id": "monaco-cocktails-monaco-cocktails-citrus-rush-12oz-can",
+      "name": "Monaco Cocktails Citrus Rush 12oz Can",
+      "brand": "Monaco Cocktails",
+      "category": "RTD",
+      "size": "12oz",
+      "price": 3.49,
+      "logo": "/images/brands/monaco.png"
+    },
+    {
+      "id": "smirnoff-ice-smirnoff-ice-original-6pk-11oz-bottles",
+      "name": "Smirnoff Ice Original 6pk 11oz Bottles",
+      "brand": "Smirnoff Ice",
+      "category": "RTD",
+      "size": "6pk 11oz",
+      "price": 11.49,
+      "logo": "/images/brands/smirnoff.png"
+    },
+    {
+      "id": "suntory-196-suntory-196-lemon-vodka-seltzer-4pk-12oz-cans",
+      "name": "Suntory -196 Lemon Vodka Seltzer 4pk 12oz Cans",
+      "brand": "Suntory -196",
+      "category": "RTD",
+      "size": "4pk 12oz",
+      "price": 13.49,
+      "logo": "/images/brands/196-suntory.svg"
+    },
+    {
+      "id": "surfside-surfside-iced-tea-vodka-8pk-12oz-cans",
+      "name": "Surfside Iced Tea & Vodka 8pk 12oz Cans",
+      "brand": "Surfside",
+      "category": "RTD",
+      "size": "8pk 12oz",
+      "price": 21.49,
+      "logo": "/images/brands/surfside.png"
+    },
+    {
+      "id": "truly-truly-berry-variety-pack-12pk-12oz-cans",
+      "name": "Truly Berry Variety Pack 12pk 12oz Cans",
+      "brand": "Truly",
+      "category": "RTD",
+      "size": "12pk 12oz",
+      "price": 19.99,
+      "logo": "/images/brands/truly.png"
+    },
+    {
+      "id": "twisted-tea-twisted-tea-original-12pk-12oz-cans",
+      "name": "Twisted Tea Original 12pk 12oz Cans",
+      "brand": "Twisted Tea",
+      "category": "RTD",
+      "size": "12pk 12oz",
+      "price": 19.99,
+      "logo": "/images/brands/twisted-tea.png"
+    },
+    {
+      "id": "white-claw-white-claw-variety-pack-12pk-12oz-cans",
+      "name": "White Claw Variety Pack 12pk 12oz Cans",
+      "brand": "White Claw",
+      "category": "RTD",
+      "size": "12pk 12oz",
+      "price": 20.99,
+      "logo": "/images/brands/white-claw.png"
+    },
+    {
+      "id": "casamigos-casamigos-reposado-tequila-750ml",
+      "name": "Casamigos Reposado Tequila 750ml",
+      "brand": "Casamigos",
+      "category": "Spirits",
+      "size": "750ml",
+      "price": 58.99,
+      "logo": "/images/brands/casamigos.svg"
+    },
+    {
+      "id": "crown-royal-crown-royal-canadian-whisky-750ml",
+      "name": "Crown Royal Canadian Whisky 750ml",
+      "brand": "Crown Royal",
+      "category": "Spirits",
+      "size": "750ml",
+      "price": 32.99,
+      "logo": null
+    },
+    {
+      "id": "don-julio-don-julio-blanco-tequila-750ml",
+      "name": "Don Julio Blanco Tequila 750ml",
+      "brand": "Don Julio",
+      "category": "Spirits",
+      "size": "750ml",
+      "price": 56.99,
+      "logo": "/images/brands/don-julio.svg"
+    },
+    {
+      "id": "fireball-fireball-cinnamon-whisky-750ml",
+      "name": "Fireball Cinnamon Whisky 750ml",
+      "brand": "Fireball",
+      "category": "Spirits",
+      "size": "750ml",
+      "price": 18.99,
+      "logo": "/images/brands/fireball.png"
+    },
+    {
+      "id": "grey-goose-grey-goose-vodka-750ml",
+      "name": "Grey Goose Vodka 750ml",
+      "brand": "Grey Goose",
+      "category": "Spirits",
+      "size": "750ml",
+      "price": 34.99,
+      "logo": "/images/brands/grey-goose.png"
+    },
+    {
+      "id": "jameson-jameson-irish-whiskey-1-l",
+      "name": "Jameson Irish Whiskey 1 L",
+      "brand": "Jameson",
+      "category": "Spirits",
+      "size": "1 L",
+      "price": 39.99,
+      "logo": "/images/brands/jameson.webp"
+    },
+    {
+      "id": "patr-n-patr-n-silver-tequila-750ml",
+      "name": "Patrón Silver Tequila 750ml",
+      "brand": "Patrón",
+      "category": "Spirits",
+      "size": "750ml",
+      "price": 52.99,
+      "logo": "/images/brands/patron.svg"
+    },
+    {
+      "id": "tito-s-handmade-vodka-tito-s-handmade-vodka-1-l",
+      "name": "Tito's Handmade Vodka 1 L",
+      "brand": "Tito's Handmade Vodka",
+      "category": "Spirits",
+      "size": "1 L",
+      "price": 31.99,
+      "logo": "/images/brands/titos.svg"
+    },
+    {
+      "id": "tito-s-handmade-vodka-tito-s-handmade-vodka-1-75-l",
+      "name": "Tito's Handmade Vodka 1.75 L",
+      "brand": "Tito's Handmade Vodka",
+      "category": "Spirits",
+      "size": "1.75 L",
+      "price": 42.99,
+      "logo": "/images/brands/titos.svg"
+    },
+    {
+      "id": "kim-crawford-kim-crawford-sauvignon-blanc-750ml",
+      "name": "Kim Crawford Sauvignon Blanc 750ml",
+      "brand": "Kim Crawford",
+      "category": "Wine",
+      "size": "750ml",
+      "price": 18.99,
+      "logo": "/images/brands/kim-crawford.png"
+    },
+    {
+      "id": "la-marca-la-marca-prosecco-750ml",
+      "name": "La Marca Prosecco 750ml",
+      "brand": "La Marca",
+      "category": "Wine",
+      "size": "750ml",
+      "price": 17.99,
+      "logo": "/images/brands/lamarca.svg"
+    }
+  ]
+}
