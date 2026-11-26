@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { STORE } from "../lib/store-info";
 import type { InventoryItem } from "../services/inventory.service";
 import { BrandLogo } from "./brand-logo";
-import { LiquorDetailModal } from "./LiquorDetailModal";
+import { ProductDetailModal } from "./ProductDetailModal";
 
 export type LiquorCatalogProps = {
   items: InventoryItem[];
@@ -160,7 +160,7 @@ export function LiquorCatalog({
                 setSelectedItem(item);
               }}
               aria-label={`View details for ${item.name}`}
-              className="flex min-w-0 flex-1 cursor-pointer items-start gap-4 text-left focus-visible:outline-none"
+              className="flex min-w-0 flex-1 cursor-pointer items-start gap-4 rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#111B2B]"
             >
               <BrandLogo brand={item.brand} size={56} showFallbackBadge className="shrink-0" />
               <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
@@ -175,6 +175,7 @@ export function LiquorCatalog({
                 <div className="mt-1 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-2">
                   <span className="font-mono text-xs text-slate-400">
                     {item.size || "In store"}
+                    {item.abv ? ` · ${item.abv}` : ""}
                   </span>
                   <span className="font-mono text-lg font-bold tabular-nums text-cyan-300">
                     {formatPrice(item.price)}
@@ -231,7 +232,7 @@ export function LiquorCatalog({
         </nav>
       )}
 
-      <LiquorDetailModal
+      <ProductDetailModal
         item={selectedItem}
         onClose={() => setSelectedItem(null)}
         onSelectBrand={onSelectBrand}

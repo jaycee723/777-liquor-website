@@ -158,12 +158,13 @@ export async function fetchInventoryItemDetail(
           description:
             typeof data.description === "string" && data.description.trim()
               ? data.description.trim()
-              : undefined,
-          abv: typeof data.abv === "string" && data.abv.trim() ? data.abv.trim() : undefined,
+              : fallbackItem?.description,
+          abv:
+            typeof data.abv === "string" && data.abv.trim() ? data.abv.trim() : fallbackItem?.abv,
           origin:
             typeof data.origin === "string" && data.origin.trim()
               ? normalizeInventoryText(data.origin)
-              : undefined,
+              : fallbackItem?.origin,
           inStock: typeof data.inStock === "boolean" ? data.inStock : true,
           updatedAt: formatFirestoreTimestamp(data.updatedAt),
           source: "firestore",

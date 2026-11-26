@@ -24,6 +24,9 @@ const CATALOG_ITEMS: InventoryItem[] = (catalogData.items as InventoryItem[]).ma
   category: normalizeCategory(item.category),
   size: item.size,
   price: item.price,
+  ...(item.description ? { description: item.description } : {}),
+  ...(item.abv ? { abv: item.abv } : {}),
+  ...(item.origin ? { origin: item.origin } : {}),
 }));
 const CATALOG_UPDATED_AT: string | null = catalogData.generatedAt ?? null;
 const CATEGORY_ORDER = ["Beer", "RTD", "Spirits", "Wine"] as const;

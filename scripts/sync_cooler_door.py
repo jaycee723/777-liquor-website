@@ -87,11 +87,14 @@ BRAND_CASING_OVERRIDES = {
     "md 20/20": "MD 20/20",
 }
 
-NAME_FIELDS = ["product name", "item name", "name", "product", "item", "description", "title"]
+NAME_FIELDS = ["product name", "item name", "name", "product", "item", "title"]
 BRAND_FIELDS = ["brand", "vendor", "manufacturer", "maker"]
 CATEGORY_FIELDS = ["category", "department", "type", "section", "group"]
 SIZE_FIELDS = ["size", "pack", "unit", "volume", "package"]
 PRICE_FIELDS = ["price", "retail price", "retail", "unit price", "amount", "cost"]
+DESCRIPTION_FIELDS = ["tasting notes", "product description", "notes", "details", "description"]
+ABV_FIELDS = ["abv", "alcohol %", "alc %", "alcohol", "proof"]
+ORIGIN_FIELDS = ["origin", "country", "region"]
 
 
 # --------------------------------------------------------------------------
@@ -378,11 +381,21 @@ def main() -> int:
     aliases, overrides, by_slug, by_brand = load_logo_resolver()
     known_brands = load_known_brands()
 
+    existing_meta: dict[str, dict] = {}
+    if args.output.exists():
+        try:
+            prev_catalog = json.loads(args.output.read_text(encoding="utf-8"))
+            for prev_item in prev_catalog.get("items", []):
+                if isinstance(prev_item, dict) and prev_item.get("id"):
+                    existing_meta[prev_item["id"]] = prev_item
+        except Exception:
+            pass
+
     items = []
     dropped = {"no-name-or-price": 0, "non-alcohol": 0, "duplicate": 0}
     seen_ids = set()
     for row in rows:
-        raw_name = str(pick_field(row, NAME_FIELDS) or "").strip()
+        raw_name = str(pick_field(row, NAME_FIELDS) or pick_field(row, ["description"]) or "").strip()
         price = parse_price(pick_field(row, PRICE_FIELDS))
         if not raw_name or price is None:
             dropped["no-name-or-price"] += 1
@@ -390,6 +403,9 @@ def main() -> int:
         raw_brand = str(pick_field(row, BRAND_FIELDS) or "").strip()
         raw_category = str(pick_field(row, CATEGORY_FIELDS) or "").strip()
         raw_size = str(pick_field(row, SIZE_FIELDS) or "").strip()
+        raw_description = str(pick_field(row, DESCRIPTION_FIELDS) or "").strip()
+        raw_abv = str(pick_field(row, ABV_FIELDS) or "").strip()
+        raw_origin = str(pick_field(row, ORIGIN_FIELDS) or "").strip()
 
         size = normalize_text(raw_size) if raw_size else ""
         name = normalize_text(raw_name)
@@ -415,7 +431,17 @@ def main() -> int:
             dropped["duplicate"] += 1
             continue
         seen_ids.add(item_id)
-        items.append({
+
+        prev = existing_meta.get(item_id, {})
+        description = (
+            raw_description
+            if raw_description and raw_description.lower() != raw_name.lower()
+            else prev.get("description")
+        )
+        abv = raw_abv or prev.get("abv")
+        origin = normalize_text(raw_origin) if raw_origin else prev.get("origin")
+
+        item_entry = {
             "id": item_id,
             "name": name,
             "brand": brand,
@@ -423,7 +449,14 @@ def main() -> int:
             "size": size,
             "price": price,
             "logo": resolve_logo(brand, aliases, overrides, by_slug, by_brand),
-        })
+        }
+        if abv:
+            item_entry["abv"] = abv
+        if origin:
+            item_entry["origin"] = origin
+        if description:
+            item_entry["description"] = description
+        items.append(item_entry)
 
     missing: dict[str, str] = {}
     for item in items:
