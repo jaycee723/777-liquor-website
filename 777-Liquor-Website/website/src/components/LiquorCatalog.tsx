@@ -128,7 +128,7 @@ export function LiquorCatalog({
       <div className="rounded-2xl border border-slate-800 bg-[#111B2B] p-10 text-center">
         <h2 className="font-display text-xl font-bold text-slate-100">No matching drinks found</h2>
         <p className="mx-auto mt-2 max-w-md text-sm text-slate-400">
-          Try clearing your search or switching back to all categories to see every item in the
+          Try clearing your search or switching to another category tab to browse more drinks in the
           Cooler Door.
         </p>
         {onResetFilters && (
@@ -168,9 +168,9 @@ export function LiquorCatalog({
                   <p className="text-xs font-medium text-slate-400">
                     {item.category} · {item.brand}
                   </p>
-                  <h2 className="mt-1 font-display text-base font-bold leading-snug text-slate-100 transition-colors group-hover:text-cyan-300">
+                  <h3 className="mt-1 font-display text-base font-bold leading-snug text-slate-100 transition-colors group-hover:text-cyan-300">
                     {item.name}
-                  </h2>
+                  </h3>
                 </div>
                 <div className="mt-1 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-2">
                   <span className="font-mono text-xs text-slate-400">
