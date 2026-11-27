@@ -1,19 +1,23 @@
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   onSnapshot,
   query,
+  Timestamp,
   where,
   type DocumentData,
   type QuerySnapshot,
   type Unsubscribe,
 } from "firebase/firestore";
-import { db, handleFirestoreError, OperationType } from "../lib/firebase";
+import { getDb, handleFirestoreError, OperationType } from "../lib/firebase";
 import {
   deleteCoolerItem,
   saveCoolerItem,
   syncInventoryToFirestore,
   toSafeDocumentId,
+  type SaveCoolerItemInput,
 } from "../lib/firestore-inventory";
 import {
   loadCoolerDoorInventory,
@@ -32,6 +36,15 @@ export type InventoryListResult = {
   updatedAt: string | null;
 };
 
+export type CoolerItemDetail = InventoryItem & {
+  description?: string;
+  abv?: string;
+  origin?: string;
+  inStock: boolean;
+  updatedAt: string | null;
+  source: InventorySource;
+};
+
 export type FetchInventoryOptions = {
   /** Optional category filter (e.g. "Beer", "RTD", "Spirits", "Wine", "Beverages"). */
   category?: string;
@@ -40,6 +53,17 @@ export type FetchInventoryOptions = {
   /** Bypass client-side cache when reading the bundled Excel fallback. */
   forceExcelReload?: boolean;
 };
+
+function formatFirestoreTimestamp(value: unknown): string | null {
+  if (value instanceof Timestamp) {
+    return value.toDate().toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+  return null;
+}
 
 function mapSnapshotToItems(snapshot: QuerySnapshot<DocumentData>): InventoryItem[] {
   const items: InventoryItem[] = [];
@@ -62,7 +86,7 @@ function mapSnapshotToItems(snapshot: QuerySnapshot<DocumentData>): InventoryIte
 }
 
 function buildPublicInventoryQuery(category?: string) {
-  const baseCollection = collection(db, COOLER_ITEMS_PATH);
+  const baseCollection = collection(getDb(), COOLER_ITEMS_PATH);
   const normalizedCategory =
     category && category !== "All" ? normalizeCategory(category) : undefined;
 
@@ -86,6 +110,83 @@ export async function fetchFirestoreInventory(category?: string): Promise<Invent
   } catch (error) {
     handleFirestoreError(error, OperationType.LIST, COOLER_ITEMS_PATH);
   }
+}
+
+/**
+ * Fetches full product details for a single Cooler Door item directly from Firestore,
+ * falling back to the catalog item when the item originates from the local Excel sheet.
+ */
+export async function fetchInventoryItemDetail(
+  itemId: string,
+  fallbackItem?: InventoryItem,
+): Promise<CoolerItemDetail> {
+  const candidateIds = Array.from(
+    new Set(
+      [
+        toSafeDocumentId(itemId),
+        fallbackItem ? toSafeDocumentId(`${fallbackItem.brand}-${fallbackItem.name}`) : null,
+      ].filter((id): id is string => Boolean(id)),
+    ),
+  );
+
+  for (const safeId of candidateIds) {
+    const docPath = `${COOLER_ITEMS_PATH}/${safeId}`;
+    try {
+      const docSnap = await getDoc(doc(getDb(), COOLER_ITEMS_PATH, safeId));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        return {
+          id: docSnap.id,
+          name: normalizeInventoryText(
+            typeof data.name === "string" ? data.name : (fallbackItem?.name ?? ""),
+          ),
+          brand: normalizeInventoryText(
+            typeof data.brand === "string" ? data.brand : (fallbackItem?.brand ?? ""),
+          ),
+          category: normalizeCategory(
+            typeof data.category === "string"
+              ? data.category
+              : (fallbackItem?.category ?? "Beverages"),
+          ),
+          size: normalizeInventoryText(
+            typeof data.size === "string" ? data.size : (fallbackItem?.size ?? ""),
+          ),
+          price:
+            typeof data.price === "number" && data.price > 0
+              ? Math.round(data.price * 100) / 100
+              : (fallbackItem?.price ?? 0),
+          description:
+            typeof data.description === "string" && data.description.trim()
+              ? data.description.trim()
+              : fallbackItem?.description,
+          abv:
+            typeof data.abv === "string" && data.abv.trim() ? data.abv.trim() : fallbackItem?.abv,
+          origin:
+            typeof data.origin === "string" && data.origin.trim()
+              ? normalizeInventoryText(data.origin)
+              : fallbackItem?.origin,
+          inStock: typeof data.inStock === "boolean" ? data.inStock : true,
+          updatedAt: formatFirestoreTimestamp(data.updatedAt),
+          source: "firestore",
+        };
+      }
+    } catch (error) {
+      if (!fallbackItem) {
+        handleFirestoreError(error, OperationType.GET, docPath);
+      }
+    }
+  }
+
+  if (fallbackItem) {
+    return {
+      ...fallbackItem,
+      inStock: true,
+      updatedAt: null,
+      source: "excel",
+    };
+  }
+
+  throw new Error("Product details were not found in the inventory database.");
 }
 
 /**
@@ -156,4 +257,4 @@ export function subscribeToInventoryList(
 }
 
 export { deleteCoolerItem, saveCoolerItem, syncInventoryToFirestore, toSafeDocumentId };
-export type { InventoryItem };
+export type { InventoryItem, SaveCoolerItemInput };

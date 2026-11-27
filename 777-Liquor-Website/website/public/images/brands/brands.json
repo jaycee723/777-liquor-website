@@ -12,15 +12,15 @@
       "slug": "maui-brewing",
       "brand": "Maui Brewing",
       "category": "Beer",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/maui-brewing.png",
+      "status": "ok"
     },
     {
       "slug": "kona-brewing",
       "brand": "Kona Brewing",
       "category": "Beer",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/kona-brewing.png",
+      "status": "ok"
     },
     {
       "slug": "modelo",
@@ -145,8 +145,8 @@
       "slug": "hallasan",
       "brand": "Hallasan",
       "category": "Beer",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/hallasan.jpg",
+      "status": "ok"
     },
     {
       "slug": "honolulu-beerworks",
@@ -222,8 +222,8 @@
       "slug": "hurricane",
       "brand": "Hurricane",
       "category": "Beer",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/hurricane.jpg",
+      "status": "ok"
     },
     {
       "slug": "mind-haze",
@@ -334,8 +334,8 @@
       "slug": "founders",
       "brand": "Founders",
       "category": "Beer",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/founders.png",
+      "status": "ok"
     },
     {
       "slug": "guinness",
@@ -376,8 +376,8 @@
       "slug": "natural-ice",
       "brand": "Natural Ice",
       "category": "Beer",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/natural-ice.png",
+      "status": "ok"
     },
     {
       "slug": "paulaner",
@@ -446,8 +446,8 @@
       "slug": "colt-45",
       "brand": "Colt 45",
       "category": "Beer",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/colt-45.jpg",
+      "status": "ok"
     },
     {
       "slug": "dogfish-head",
@@ -530,8 +530,8 @@
       "slug": "olympia",
       "brand": "Olympia",
       "category": "Beer",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/olympia.jpg",
+      "status": "ok"
     },
     {
       "slug": "orion",
@@ -544,8 +544,8 @@
       "slug": "peroni",
       "brand": "Peroni",
       "category": "Beer",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/peroni.png",
+      "status": "ok"
     },
     {
       "slug": "presidente",
@@ -572,15 +572,15 @@
       "slug": "schlitz",
       "brand": "Schlitz",
       "category": "Beer",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/schlitz.svg",
+      "status": "ok"
     },
     {
       "slug": "shock-top",
       "brand": "Shock Top",
       "category": "Beer",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/shock-top.png",
+      "status": "ok"
     },
     {
       "slug": "singha",
@@ -635,8 +635,8 @@
       "slug": "buzzballz",
       "brand": "Buzzballz",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/buzzballz.png",
+      "status": "ok"
     },
     {
       "slug": "high-noon",
@@ -684,8 +684,8 @@
       "slug": "smirnoff-ice",
       "brand": "Smirnoff Ice",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/smirnoff-ice.png",
+      "status": "ok"
     },
     {
       "slug": "four-loko",
@@ -712,8 +712,8 @@
       "slug": "the-beast",
       "brand": "The Beast",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/the-beast.jpg",
+      "status": "ok"
     },
     {
       "slug": "truly",
@@ -726,8 +726,8 @@
       "slug": "arizona-hard",
       "brand": "Arizona Hard",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/arizona-hard.png",
+      "status": "ok"
     },
     {
       "slug": "vmc",
@@ -768,8 +768,8 @@
       "slug": "beach-juice",
       "brand": "Beach Juice",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/beach-juice.png",
+      "status": "ok"
     },
     {
       "slug": "hyoketsu",
@@ -789,8 +789,8 @@
       "slug": "summer-club",
       "brand": "Summer Club",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/summer-club.webp",
+      "status": "ok"
     },
     {
       "slug": "angry-orchard",
@@ -831,8 +831,8 @@
       "slug": "monster-beast-hard",
       "brand": "Monster Beast Hard",
       "category": "RTD",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/the-beast.jpg",
+      "status": "ok"
     },
     {
       "slug": "paradise-ciders",
@@ -1111,8 +1111,8 @@
       "slug": "jack-daniels",
       "brand": "Jack Daniel's",
       "category": "Spirits",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/jack-daniels.svg",
+      "status": "ok"
     },
     {
       "slug": "99-bananas",
@@ -1125,22 +1125,22 @@
       "slug": "crown-royal",
       "brand": "Crown Royal",
       "category": "Spirits",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/crown-royal.jpg",
+      "status": "ok"
     },
     {
       "slug": "new-amsterdam",
       "brand": "New Amsterdam",
       "category": "Spirits",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/new-amsterdam.jpg",
+      "status": "ok"
     },
     {
       "slug": "malibu",
       "brand": "Malibu",
       "category": "Spirits",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/malibu.png",
+      "status": "ok"
     },
     {
       "slug": "titos",
@@ -1699,8 +1699,8 @@
       "slug": "havana-club",
       "brand": "Havana Club",
       "category": "Spirits",
-      "logo": null,
-      "status": "missing"
+      "logo": "/images/brands/havana-club.png",
+      "status": "ok"
     },
     {
       "slug": "hawaiian-vintage-chocolate",
@@ -1804,8 +1804,8 @@
       "slug": "martell",
       "brand": "Martell",
       "category": "Spirits",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/martell.svg",
+      "status": "ok"
     },
     {
       "slug": "milagro",
@@ -1867,8 +1867,8 @@
       "slug": "pinnacle",
       "brand": "Pinnacle",
       "category": "Spirits",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/pinnacle.jpg",
+      "status": "ok"
     },
     {
       "slug": "remy-martin",
@@ -2063,8 +2063,8 @@
       "slug": "josh-cellars",
       "brand": "Josh Cellars",
       "category": "Wine",
-      "logo": null,
-      "status": "review"
+      "logo": "/images/brands/josh-cellars.png",
+      "status": "ok"
     },
     {
       "slug": "kendall-jackson",
@@ -2281,6 +2281,342 @@
       "brand": "Yellow Tail",
       "category": "Wine",
       "logo": "/images/brands/yellow-tail.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "smirnoff-ice-smash",
+      "brand": "Smirnoff Ice Smash",
+      "category": "RTD",
+      "logo": "/images/brands/smirnoff-ice-smash.png",
+      "status": "ok"
+    },
+    {
+      "slug": "steel-reserve-hard-pineapple",
+      "brand": "Steel Reserve Hard Pineapple",
+      "category": "RTD",
+      "logo": "/images/brands/steel-reserve-hard-pineapple.png",
+      "status": "ok"
+    },
+    {
+      "slug": "good-day-soju",
+      "brand": "Good Day Soju",
+      "category": "Spirits",
+      "logo": "/images/brands/good-day-soju.png",
+      "status": "ok"
+    },
+    {
+      "slug": "steel-reserve-spiked-blue-razz",
+      "brand": "Steel Reserve Spiked Blue Razz",
+      "category": "RTD",
+      "logo": "/images/brands/steel-reserve-spiked-blue-razz.png",
+      "status": "ok"
+    },
+    {
+      "slug": "rogue-dead-guy-ale",
+      "brand": "Rogue Dead Guy Ale",
+      "category": "Beer",
+      "logo": "/images/brands/rogue-dead-guy-ale.png",
+      "status": "ok"
+    },
+    {
+      "slug": "steel-reserve-spiked-watermelon",
+      "brand": "Steel Reserve Spiked Watermelon",
+      "category": "RTD",
+      "logo": "/images/brands/steel-reserve-spiked-watermelon.png",
+      "status": "ok"
+    },
+    {
+      "slug": "buzzballz-biggies",
+      "brand": "Buzzballz Biggies",
+      "category": "RTD",
+      "logo": "/images/brands/buzzballz-biggies.png",
+      "status": "ok"
+    },
+    {
+      "slug": "big-mango-beer-hug",
+      "brand": "Big Mango Beer Hug",
+      "category": "Beer",
+      "logo": "/images/brands/big-mango-beer-hug.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "michelob-ultra-pure-gold",
+      "brand": "Michelob Ultra Pure Gold",
+      "category": "Beer",
+      "logo": "/images/brands/michelob-ultra-pure-gold.png",
+      "status": "ok"
+    },
+    {
+      "slug": "modelo-chelada",
+      "brand": "Modelo Chelada",
+      "category": "Beer",
+      "logo": "/images/brands/modelo-chelada.png",
+      "status": "ok"
+    },
+    {
+      "slug": "bud-light-chelada",
+      "brand": "Bud Light Chelada",
+      "category": "Beer",
+      "logo": "/images/brands/bud-light-chelada.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "bud-light-platinum",
+      "brand": "Bud Light Platinum",
+      "category": "Beer",
+      "logo": "/images/brands/bud-light-platinum.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "voodoo-ranger-juice-force",
+      "brand": "Voodoo Ranger Juice Force",
+      "category": "Beer",
+      "logo": "/images/brands/voodoo-ranger-juice-force.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "mikes-harder",
+      "brand": "Mike's Harder",
+      "category": "RTD",
+      "logo": "/images/brands/mikes-harder.png",
+      "status": "ok"
+    },
+    {
+      "slug": "coors-banquet",
+      "brand": "Coors Banquet",
+      "category": "Beer",
+      "logo": "/images/brands/coors-banquet.png",
+      "status": "ok"
+    },
+    {
+      "slug": "sapporo-reserve",
+      "brand": "Sapporo Reserve",
+      "category": "Beer",
+      "logo": "/images/brands/sapporo-reserve.png",
+      "status": "ok"
+    },
+    {
+      "slug": "the-beast-perfect-10",
+      "brand": "The Beast Perfect 10",
+      "category": "RTD",
+      "logo": "/images/brands/the-beast-perfect-10.png",
+      "status": "ok"
+    },
+    {
+      "slug": "lucky-one",
+      "brand": "Lucky One",
+      "category": "RTD",
+      "logo": "/images/brands/lucky-one.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "olde-english-800",
+      "brand": "Olde English 800",
+      "category": "Beer",
+      "logo": "/images/brands/olde-english-800.png",
+      "status": "ok"
+    },
+    {
+      "slug": "skyy-vodka",
+      "brand": "SKYY Vodka",
+      "category": "Spirits",
+      "logo": "/images/brands/skyy-vodka.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "aviation-gin",
+      "brand": "Aviation American Gin",
+      "category": "Spirits",
+      "logo": "/images/brands/aviation-gin.png",
+      "status": "ok"
+    },
+    {
+      "slug": "laphroaig",
+      "brand": "Laphroaig",
+      "category": "Spirits",
+      "logo": "/images/brands/laphroaig.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "whistlepig",
+      "brand": "WhistlePig",
+      "category": "Spirits",
+      "logo": "/images/brands/whistlepig.png",
+      "status": "ok"
+    },
+    {
+      "slug": "hoegaarden",
+      "brand": "Hoegaarden",
+      "category": "Beer",
+      "logo": "/images/brands/hoegaarden.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "leffe",
+      "brand": "Leffe",
+      "category": "Beer",
+      "logo": "/images/brands/leffe.png",
+      "status": "ok"
+    },
+    {
+      "slug": "pilsner-urquell",
+      "brand": "Pilsner Urquell",
+      "category": "Beer",
+      "logo": "/images/brands/pilsner-urquell.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "warsteiner",
+      "brand": "Warsteiner",
+      "category": "Beer",
+      "logo": "/images/brands/warsteiner.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "bitburger",
+      "brand": "Bitburger",
+      "category": "Beer",
+      "logo": "/images/brands/bitburger.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "erdinger",
+      "brand": "Erdinger",
+      "category": "Beer",
+      "logo": "/images/brands/erdinger.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "spaten",
+      "brand": "Spaten",
+      "category": "Beer",
+      "logo": "/images/brands/spaten.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "molson-canadian",
+      "brand": "Molson Canadian",
+      "category": "Beer",
+      "logo": "/images/brands/molson-canadian.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "grolsch",
+      "brand": "Grolsch",
+      "category": "Beer",
+      "logo": "/images/brands/grolsch.png",
+      "status": "ok"
+    },
+    {
+      "slug": "brewdog",
+      "brand": "BrewDog",
+      "category": "Beer",
+      "logo": "/images/brands/brewdog.png",
+      "status": "ok"
+    },
+    {
+      "slug": "anchor-brewing",
+      "brand": "Anchor Brewing",
+      "category": "Beer",
+      "logo": "/images/brands/anchor-brewing.png",
+      "status": "ok"
+    },
+    {
+      "slug": "oskar-blues",
+      "brand": "Oskar Blues",
+      "category": "Beer",
+      "logo": "/images/brands/oskar-blues.png",
+      "status": "ok"
+    },
+    {
+      "slug": "sweetwater",
+      "brand": "SweetWater Brewing",
+      "category": "Beer",
+      "logo": "/images/brands/sweetwater.png",
+      "status": "ok"
+    },
+    {
+      "slug": "harp-lager",
+      "brand": "Harp Lager",
+      "category": "Beer",
+      "logo": "/images/brands/harp-lager.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "super-bock",
+      "brand": "Super Bock",
+      "category": "Beer",
+      "logo": "/images/brands/super-bock.png",
+      "status": "ok"
+    },
+    {
+      "slug": "bushmills",
+      "brand": "Bushmills",
+      "category": "Spirits",
+      "logo": "/images/brands/bushmills.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "chimay",
+      "brand": "Chimay",
+      "category": "Beer",
+      "logo": "/images/brands/chimay.png",
+      "status": "ok"
+    },
+    {
+      "slug": "kronenbourg-1664",
+      "brand": "Kronenbourg 1664",
+      "category": "Beer",
+      "logo": "/images/brands/kronenbourg-1664.png",
+      "status": "ok"
+    },
+    {
+      "slug": "shiner",
+      "brand": "Shiner",
+      "category": "Beer",
+      "logo": "/images/brands/shiner.png",
+      "status": "ok"
+    },
+    {
+      "slug": "hofbrau",
+      "brand": "Hofbr\u00e4u",
+      "category": "Beer",
+      "logo": "/images/brands/hofbrau.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "labatt-blue",
+      "brand": "Labatt Blue",
+      "category": "Beer",
+      "logo": "/images/brands/labatt-blue.svg",
+      "status": "ok"
+    },
+    {
+      "slug": "san-miguel",
+      "brand": "San Miguel",
+      "category": "Beer",
+      "logo": "/images/brands/san-miguel.png",
+      "status": "ok"
+    },
+    {
+      "slug": "smithwicks",
+      "brand": "Smithwick's",
+      "category": "Beer",
+      "logo": "/images/brands/smithwicks.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "kopparberg",
+      "brand": "Kopparberg",
+      "category": "RTD",
+      "logo": "/images/brands/kopparberg.jpg",
+      "status": "ok"
+    },
+    {
+      "slug": "liquid-death",
+      "brand": "Liquid Death",
+      "category": "RTD",
+      "logo": "/images/brands/liquid-death.png",
       "status": "ok"
     }
   ]

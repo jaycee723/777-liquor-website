@@ -5,6 +5,19 @@ import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
+
+// The SSR bundle runs in a Cloudflare Worker, but Vite's SSR resolution
+// picks @firebase/firestore's *Node* build (dist/index.node.mjs), which
+// loads its RPC definitions through @grpc/proto-loader -> protobufjs code
+// generation (`new Function`). Workers forbid code generation, so every
+// SSR page crashed with HTTP 500 (EvalError). Force the browser build
+// (WebChannel transport, no proto-loader) in the server bundle instead.
+const FIRESTORE_BROWSER_BUILD = join(
+  dirname(createRequire(import.meta.url).resolve("@firebase/firestore/package.json")),
+  "dist/index.esm.js",
+);
 
 // The vendored @higgsfield/quanta components import their glyphs from the private
 // Nexus-only `@higgsfield-ai/icons`. Generated sites build on the PUBLIC npm
@@ -23,7 +36,14 @@ export default defineConfig(({ mode }) => {
       allowedHosts: true,
     },
     resolve: {
-      alias: [{ find: /^@higgsfield-ai\/icons(\/.*)?$/, replacement: QUANTA_ICONS_SHIM }],
+      alias: [
+        { find: /^@higgsfield-ai\/icons(\/.*)?$/, replacement: QUANTA_ICONS_SHIM },
+        // See FIRESTORE_BROWSER_BUILD above: keep the Node (grpc/proto-loader)
+        // build of Firestore out of every bundle; the browser build is what
+        // the client uses anyway.
+        { find: /^@firebase\/firestore$/, replacement: FIRESTORE_BROWSER_BUILD },
+        { find: /^firebase\/firestore$/, replacement: FIRESTORE_BROWSER_BUILD },
+      ],
     },
     // The server bundle runs as a Cloudflare Worker — there is no node_modules
     // at runtime. Vite's default SSR build leaves npm deps as bare external

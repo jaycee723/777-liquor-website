@@ -7,6 +7,9 @@ export type InventoryItem = {
   category: string;
   size: string;
   price: number;
+  description?: string;
+  abv?: string;
+  origin?: string;
 };
 
 export type InventoryCatalog = {
@@ -268,15 +271,9 @@ export function parseInventoryWorkbook(
   const items: InventoryItem[] = [];
   rawRows.forEach((row, index) => {
     const rawName = String(
-      pickField(row, [
-        "product name",
-        "item name",
-        "name",
-        "product",
-        "item",
-        "description",
-        "title",
-      ]) ?? "",
+      pickField(row, ["product name", "item name", "name", "product", "item", "title"]) ??
+        pickField(row, ["description"]) ??
+        "",
     ).trim();
     const rawBrand = String(
       pickField(row, ["brand", "vendor", "manufacturer", "maker"]) ?? "",
@@ -287,6 +284,14 @@ export function parseInventoryWorkbook(
     const rawSize = String(
       pickField(row, ["size", "pack", "unit", "volume", "package"]) ?? "",
     ).trim();
+    const rawDescription = String(
+      pickField(row, ["tasting notes", "product description", "notes", "details", "description"]) ??
+        "",
+    ).trim();
+    const rawAbv = String(
+      pickField(row, ["abv", "alcohol %", "alc %", "alcohol", "proof"]) ?? "",
+    ).trim();
+    const rawOrigin = String(pickField(row, ["origin", "country", "region"]) ?? "").trim();
     const price = parsePrice(
       pickField(row, ["price", "retail price", "retail", "unit price", "amount", "cost"]),
     );
@@ -303,6 +308,12 @@ export function parseInventoryWorkbook(
       ? normalizeInventoryText(rawBrand)
       : normalizedName.split(" ").slice(0, 2).join(" ");
     const category = normalizeCategory(rawCategory);
+    const description =
+      rawDescription && rawDescription.toLowerCase() !== rawName.toLowerCase()
+        ? rawDescription
+        : undefined;
+    const abv = rawAbv || undefined;
+    const origin = rawOrigin ? normalizeInventoryText(rawOrigin) : undefined;
 
     items.push({
       id: `${index}-${brand.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${normalizedName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
@@ -311,6 +322,9 @@ export function parseInventoryWorkbook(
       category,
       size: normalizedSize,
       price,
+      ...(description ? { description } : {}),
+      ...(abv ? { abv } : {}),
+      ...(origin ? { origin } : {}),
     });
   });
 

@@ -9,7 +9,7 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { db, handleFirestoreError, OperationType } from "./firebase";
+import { getDb, handleFirestoreError, OperationType } from "./firebase";
 import { normalizeCategory, normalizeInventoryText, type InventoryItem } from "./inventory";
 
 // Blueprint volumetric boundaries & constraints (synced with firebase-blueprint.json)
@@ -17,11 +17,27 @@ const MAX_ID_LENGTH = 128;
 const MAX_NAME_LENGTH = 140;
 const MAX_BRAND_LENGTH = 80;
 const MAX_SIZE_LENGTH = 40;
+const MAX_DESCRIPTION_LENGTH = 500;
+const MAX_ABV_LENGTH = 20;
+const MAX_ORIGIN_LENGTH = 80;
 const MAX_PRICE = 10000;
 const ALLOWED_CATEGORIES = new Set(["Beer", "RTD", "Spirits", "Wine", "Beverages"]);
 const VALID_ID_PATTERN = /^[a-zA-Z0-9_-]+$/;
 
 const COOLER_ITEMS_COLLECTION = "coolerItems";
+
+export type SaveCoolerItemInput = {
+  id?: string;
+  name: string;
+  brand: string;
+  category: string;
+  size: string;
+  price: number;
+  description?: string;
+  abv?: string;
+  origin?: string;
+  inStock?: boolean;
+};
 
 export function toSafeDocumentId(raw: string): string {
   const cleaned = raw
@@ -37,10 +53,7 @@ export function toSafeDocumentId(raw: string): string {
   return `item-${Date.now()}`;
 }
 
-function buildValidatedPayload(
-  input: { name: string; brand: string; category: string; size: string; price: number },
-  uid: string,
-) {
+function buildValidatedPayload(input: SaveCoolerItemInput, uid: string) {
   const name = normalizeInventoryText(input.name).slice(0, MAX_NAME_LENGTH).trim();
   const brand = normalizeInventoryText(input.brand).slice(0, MAX_BRAND_LENGTH).trim();
   const normalizedCat = normalizeCategory(input.category);
@@ -57,12 +70,22 @@ function buildValidatedPayload(
     throw new Error("Invalid administrator identifier.");
   }
 
+  const description = input.description?.trim().slice(0, MAX_DESCRIPTION_LENGTH);
+  const abv = input.abv?.trim().slice(0, MAX_ABV_LENGTH);
+  const origin = input.origin?.trim()
+    ? normalizeInventoryText(input.origin).slice(0, MAX_ORIGIN_LENGTH).trim()
+    : undefined;
+
   return {
     name,
     brand,
     category,
     size,
     price,
+    ...(description ? { description } : {}),
+    ...(abv ? { abv } : {}),
+    ...(origin ? { origin } : {}),
+    ...(typeof input.inStock === "boolean" ? { inStock: input.inStock } : {}),
     visibility: "public" as const,
     updatedBy: uid,
     updatedAt: serverTimestamp(),
@@ -74,7 +97,10 @@ function buildValidatedPayload(
  */
 export async function fetchPublicCoolerItems(): Promise<InventoryItem[]> {
   try {
-    const q = query(collection(db, COOLER_ITEMS_COLLECTION), where("visibility", "==", "public"));
+    const q = query(
+      collection(getDb(), COOLER_ITEMS_COLLECTION),
+      where("visibility", "==", "public"),
+    );
     const snapshot = await getDocs(q);
     const items: InventoryItem[] = [];
     snapshot.forEach((docSnap) => {
@@ -102,14 +128,7 @@ export async function fetchPublicCoolerItems(): Promise<InventoryItem[]> {
  * Creates or updates a single Cooler Door item in Firestore (admin only).
  */
 export async function saveCoolerItem(
-  input: {
-    id?: string;
-    name: string;
-    brand: string;
-    category: string;
-    size: string;
-    price: number;
-  },
+  input: SaveCoolerItemInput,
   uid: string,
 ): Promise<InventoryItem> {
   const payload = buildValidatedPayload(input, uid);
@@ -117,7 +136,7 @@ export async function saveCoolerItem(
   const path = `${COOLER_ITEMS_COLLECTION}/${itemId}`;
 
   try {
-    await setDoc(doc(db, COOLER_ITEMS_COLLECTION, itemId), payload);
+    await setDoc(doc(getDb(), COOLER_ITEMS_COLLECTION, itemId), payload);
     return {
       id: itemId,
       name: payload.name,
@@ -138,7 +157,7 @@ export async function deleteCoolerItem(itemId: string): Promise<void> {
   const safeId = toSafeDocumentId(itemId);
   const path = `${COOLER_ITEMS_COLLECTION}/${safeId}`;
   try {
-    await deleteDoc(doc(db, COOLER_ITEMS_COLLECTION, safeId));
+    await deleteDoc(doc(getDb(), COOLER_ITEMS_COLLECTION, safeId));
   } catch (error) {
     handleFirestoreError(error, OperationType.DELETE, path);
   }
@@ -157,11 +176,11 @@ export async function syncInventoryToFirestore(
   try {
     for (let i = 0; i < items.length; i += BATCH_SIZE) {
       const chunk = items.slice(i, i + BATCH_SIZE);
-      const batch = writeBatch(db);
+      const batch = writeBatch(getDb());
       for (const item of chunk) {
         const payload = buildValidatedPayload(item, uid);
         const itemId = toSafeDocumentId(`${payload.brand}-${payload.name}`);
-        batch.set(doc(db, COOLER_ITEMS_COLLECTION, itemId), payload);
+        batch.set(doc(getDb(), COOLER_ITEMS_COLLECTION, itemId), payload);
         synced += 1;
       }
       await batch.commit();

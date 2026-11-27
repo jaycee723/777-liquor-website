@@ -65,7 +65,7 @@ def api(s, url, **params):
         r.raise_for_status()
         try:
             return r.json()
-        except requests.exceptions.JSONDecodeError:
+        except (requests.exceptions.JSONDecodeError, ValueError):
             if attempt == 2:
                 raise
             time.sleep(2 ** attempt)
@@ -84,7 +84,10 @@ def wikipedia_logo(s, brand, category):
             continue
         d2 = api(s, ENWIKI, action="query", prop="revisions", rvprop="content", rvslots="main",
                  titles=hit["title"], rvsection=0)
-        pg = d2["query"]["pages"][0]
+        pages2 = d2.get("query", {}).get("pages", [])
+        if not pages2:
+            continue
+        pg = pages2[0]
         text = pg.get("revisions", [{}])[0].get("slots", {}).get("main", {}).get("content", "")
         m = re.search(r"\|\s*(?:logo|image|image_name)\s*=\s*(?:\[\[)?(?:File:|Image:)?([^|\]\n{}]+\.(?:svg|png|jpe?g|webp))",
                       text, re.I)
@@ -92,8 +95,9 @@ def wikipedia_logo(s, brand, category):
             fn = m.group(1).strip()
             d3 = api(s, ENWIKI, action="query", titles=f"File:{fn}", prop="imageinfo",
                      iiprop="url|mime|size|extmetadata", iiextmetadatafilter="LicenseShortName|Restrictions")
-            p3 = d3["query"]["pages"][0]
-            if p3.get("imageinfo"):
+            pages3 = d3.get("query", {}).get("pages", [])
+            if pages3 and pages3[0].get("imageinfo"):
+                p3 = pages3[0]
                 p3["wiki_article"] = hit["title"]
                 return p3
     return None
@@ -105,7 +109,8 @@ def clean_svg(data):
 def download(s, info):
     r = s.get(info["url"], timeout=60)
     r.raise_for_status()
-    ext = MIME_EXT.get(r.headers.get("content-type", "").split(";")[0].strip()) or MIME_EXT.get(info.get("mime", ""))
+    content_type = r.headers.get("content-type", "").split(";")[0].strip().lower()
+    ext = MIME_EXT.get(content_type) or MIME_EXT.get(info.get("mime", "").lower())
     data = r.content
     if ext not in OK_EXT or not data or len(data) > MAX_BYTES:
         return None, None
@@ -123,7 +128,10 @@ def existing_file(slug):
     return None
 
 def read_csv(path):
-    return list(csv.DictReader(open(path, encoding="utf-8"))) if os.path.exists(path) else []
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        return list(csv.DictReader(f))
 
 def write_csv(path, header, rows):
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -189,7 +197,8 @@ def main():
                         if not ext:
                             missing.append([brand, cat, "download rejected (type/size/unsafe svg)"]); stats["missing"] += 1
                         else:
-                            open(f"{IMG_DIR}/{slug}.{ext}", "wb").write(data)
+                            with open(f"{IMG_DIR}/{slug}.{ext}", "wb") as f:
+                                f.write(data)
                             entry.update(logo=f"/images/brands/{slug}.{ext}", status="ok")
                             attribution[brand] = [brand, f"{slug}.{ext}", page, lic, restr, src]
                             stats["ok"] += 1
@@ -203,14 +212,22 @@ def main():
     jpath = f"{IMG_DIR}/brands.json"
     old = {}
     if os.path.exists(jpath):
-        try: old = {b["slug"]: b for b in json.load(open(jpath))["brands"]}
-        except Exception: pass
-    for e in index: old[e["slug"]] = e
+        try:
+            with open(jpath, encoding="utf-8") as f:
+                old = {b["slug"]: b for b in json.load(f).get("brands", [])}
+        except Exception:
+            pass
+    for e in index:
+        prev_entry = old.get(e["slug"])
+        if prev_entry and "onDark" in prev_entry and "onDark" not in e:
+            e["onDark"] = prev_entry["onDark"]
+        old[e["slug"]] = e
     allrows = read_csv(a.csv)
     order = {slugify(r["brand"]): i for i, r in enumerate(allrows)}
     merged = sorted(old.values(), key=lambda b: order.get(b["slug"], 10**6))
-    json.dump({"fallback": "/images/placeholder.svg", "brands": merged}, open(jpath, "w"), indent=1)
-    open(jpath, "a").write("\n")
+    with open(jpath, "w", encoding="utf-8") as f:
+        json.dump({"fallback": "/images/placeholder.svg", "brands": merged}, f, indent=2)
+        f.write("\n")
 
     done = {r["brand"] for r in rows}
     def merge(name, header, fresh, key=0):
