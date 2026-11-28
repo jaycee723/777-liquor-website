@@ -1,0 +1,22 @@
+{
+  // 777 Inventory — Cloudflare Worker config.
+  // Bindings (D1/R2) are declared here but wired in a later phase;
+  // the scaffold runs with secrets only.
+  "name": "777-inventory",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // TODO(phase-2): uncomment when the D1 database and R2 bucket exist.
+  // "d1_databases": [
+  //   { "binding": "DB", "database_name": "777-inventory", "database_id": "<set at creation>" }
+  // ],
+  // "r2_buckets": [
+  //   { "binding": "ASSETS", "bucket_name": "777-inventory-assets" }
+  // ],
+  "vars": {
+    "APP_ENV": "production"
+  }
+  // Secrets (never in this file): APP_USERNAME, APP_PASSWORD_HASH
+  //   wrangler secret put APP_USERNAME
+  //   wrangler secret put APP_PASSWORD_HASH   # hex SHA-256 of the password
+}

@@ -1,0 +1,9 @@
+# Local development secrets for `wrangler dev`. Copy to .dev.vars (gitignored).
+# NEVER put real production credentials in a committed file.
+# APP_PASSWORD_HASH is the lowercase hex SHA-256 of the password:
+#   printf %s 'your-password' | shasum -a 256
+APP_USERNAME=justin
+APP_PASSWORD_HASH=0000000000000000000000000000000000000000000000000000000000000000
+# Later phases:
+# GEMINI_API_KEY=
+# CLOVER_API_TOKEN=

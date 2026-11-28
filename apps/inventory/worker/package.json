@@ -1,0 +1,1 @@
+{"devDependencies":{"typescript":"^5.5.0","wrangler":"^3.60.0"},"name":"777-inventory-worker","private":true,"scripts":{"deploy":"wrangler deploy","dev":"wrangler dev","typecheck":"tsc --noEmit"},"type":"module","version":"0.1.0"}
