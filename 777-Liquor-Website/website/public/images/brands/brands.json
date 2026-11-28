@@ -12,36 +12,36 @@
       "slug": "maui-brewing",
       "brand": "Maui Brewing",
       "category": "Beer",
-      "logo": "/images/brands/maui-brewing.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "kona-brewing",
       "brand": "Kona Brewing",
       "category": "Beer",
-      "logo": "/images/brands/kona-brewing.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "modelo",
       "brand": "Modelo",
       "category": "Beer",
-      "logo": "/images/brands/modelo.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "bud-light",
       "brand": "Bud Light",
       "category": "Beer",
-      "logo": "/images/brands/bud-light.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "voodoo-ranger",
       "brand": "Voodoo Ranger",
       "category": "Beer",
-      "logo": "/images/brands/voodoo-ranger.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "budweiser",
@@ -61,22 +61,22 @@
       "slug": "michelob-ultra",
       "brand": "Michelob Ultra",
       "category": "Beer",
-      "logo": "/images/brands/michelob-ultra.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "stella-artois",
       "brand": "Stella Artois",
       "category": "Beer",
-      "logo": "/images/brands/stella-artois.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "aloha-beer",
       "brand": "Aloha Beer",
       "category": "Beer",
-      "logo": "/images/brands/aloha-beer.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "coors-light",
@@ -96,22 +96,22 @@
       "slug": "mickeys",
       "brand": "Mickey's",
       "category": "Beer",
-      "logo": "/images/brands/mickeys.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "miller-lite",
       "brand": "Miller Lite",
       "category": "Beer",
-      "logo": "/images/brands/miller-lite.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sierra-nevada",
       "brand": "Sierra Nevada",
       "category": "Beer",
-      "logo": "/images/brands/sierra-nevada.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "kirin",
@@ -124,8 +124,8 @@
       "slug": "steel-reserve",
       "brand": "Steel Reserve",
       "category": "Beer",
-      "logo": "/images/brands/steel-reserve.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "coors",
@@ -138,29 +138,29 @@
       "slug": "goose-island",
       "brand": "Goose Island",
       "category": "Beer",
-      "logo": "/images/brands/goose-island.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hallasan",
       "brand": "Hallasan",
       "category": "Beer",
-      "logo": "/images/brands/hallasan.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "honolulu-beerworks",
       "brand": "Honolulu Beerworks",
       "category": "Beer",
-      "logo": "/images/brands/honolulu-beerworks.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "pacifico",
       "brand": "Pacifico",
       "category": "Beer",
-      "logo": "/images/brands/pacifico.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sapporo",
@@ -173,8 +173,8 @@
       "slug": "elysian",
       "brand": "Elysian",
       "category": "Beer",
-      "logo": "/images/brands/elysian.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "estrella-jalisco",
@@ -201,29 +201,29 @@
       "slug": "blue-moon",
       "brand": "Blue Moon",
       "category": "Beer",
-      "logo": "/images/brands/blue-moon.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "busch",
       "brand": "Busch",
       "category": "Beer",
-      "logo": "/images/brands/busch.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "deschutes",
       "brand": "Deschutes",
       "category": "Beer",
-      "logo": "/images/brands/deschutes.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hurricane",
       "brand": "Hurricane",
       "category": "Beer",
-      "logo": "/images/brands/hurricane.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "mind-haze",
@@ -236,8 +236,8 @@
       "slug": "pabst-blue-ribbon",
       "brand": "Pabst Blue Ribbon",
       "category": "Beer",
-      "logo": "/images/brands/pabst-blue-ribbon.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "fresh-haze",
@@ -257,36 +257,36 @@
       "slug": "miller-high-life",
       "brand": "Miller High Life",
       "category": "Beer",
-      "logo": "/images/brands/miller-high-life.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "natural-light",
       "brand": "Natural Light",
       "category": "Beer",
-      "logo": "/images/brands/natural-light.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "rogue",
       "brand": "Rogue",
       "category": "Beer",
-      "logo": "/images/brands/rogue.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "rolling-rock",
       "brand": "Rolling Rock",
       "category": "Beer",
-      "logo": "/images/brands/rolling-rock.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "tsingtao",
       "brand": "Tsingtao",
       "category": "Beer",
-      "logo": "/images/brands/tsingtao.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "asahi",
@@ -299,50 +299,50 @@
       "slug": "athletic-brewing",
       "brand": "Athletic Brewing",
       "category": "Beer",
-      "logo": "/images/brands/athletic-brewing.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "big-wave",
       "brand": "Big Wave",
       "category": "Beer",
-      "logo": "/images/brands/big-wave.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "coronado",
       "brand": "Coronado",
       "category": "Beer",
-      "logo": "/images/brands/coronado.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "dos-equis",
       "brand": "Dos Equis",
       "category": "Beer",
-      "logo": "/images/brands/dos-equis.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "firestone-walker",
       "brand": "Firestone Walker",
       "category": "Beer",
-      "logo": "/images/brands/firestone-walker.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "founders",
       "brand": "Founders",
       "category": "Beer",
-      "logo": "/images/brands/founders.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "guinness",
       "brand": "Guinness",
       "category": "Beer",
-      "logo": "/images/brands/guinness.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "hazy-bear-hug",
@@ -369,57 +369,57 @@
       "slug": "moosehead",
       "brand": "Moosehead",
       "category": "Beer",
-      "logo": "/images/brands/moosehead.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "natural-ice",
       "brand": "Natural Ice",
       "category": "Beer",
-      "logo": "/images/brands/natural-ice.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "paulaner",
       "brand": "Paulaner",
       "category": "Beer",
-      "logo": "/images/brands/paulaner.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "steinlager",
       "brand": "Steinlager",
       "category": "Beer",
-      "logo": "/images/brands/steinlager.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "amstel",
       "brand": "Amstel",
       "category": "Beer",
-      "logo": "/images/brands/amstel.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ballast-point",
       "brand": "Ballast Point",
       "category": "Beer",
-      "logo": "/images/brands/ballast-point.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "becks",
       "brand": "Becks",
       "category": "Beer",
-      "logo": "/images/brands/becks.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "bells",
       "brand": "Bells",
       "category": "Beer",
-      "logo": "/images/brands/bells.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "brooklyn-brewery",
@@ -446,22 +446,22 @@
       "slug": "colt-45",
       "brand": "Colt 45",
       "category": "Beer",
-      "logo": "/images/brands/colt-45.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "dogfish-head",
       "brand": "Dogfish Head",
       "category": "Beer",
-      "logo": "/images/brands/dogfish-head.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hamms",
       "brand": "Hamms",
       "category": "Beer",
-      "logo": "/images/brands/hamms.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "hawaiian-hop",
@@ -481,8 +481,8 @@
       "slug": "keystone",
       "brand": "Keystone",
       "category": "Beer",
-      "logo": "/images/brands/keystone.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "lanikai-brewing",
@@ -495,8 +495,8 @@
       "slug": "lone-star",
       "brand": "Lone Star",
       "category": "Beer",
-      "logo": "/images/brands/lone-star.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "mahou",
@@ -509,8 +509,8 @@
       "slug": "new-belgium",
       "brand": "New Belgium",
       "category": "Beer",
-      "logo": "/images/brands/new-belgium.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "newcastle",
@@ -523,29 +523,29 @@
       "slug": "old-milwaukee",
       "brand": "Old Milwaukee",
       "category": "Beer",
-      "logo": "/images/brands/old-milwaukee.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "olympia",
       "brand": "Olympia",
       "category": "Beer",
-      "logo": "/images/brands/olympia.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "orion",
       "brand": "Orion",
       "category": "Beer",
-      "logo": "/images/brands/orion.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "peroni",
       "brand": "Peroni",
       "category": "Beer",
-      "logo": "/images/brands/peroni.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "presidente",
@@ -558,8 +558,8 @@
       "slug": "red-stripe",
       "brand": "Red Stripe",
       "category": "Beer",
-      "logo": "/images/brands/red-stripe.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "samuel-adams",
@@ -572,71 +572,71 @@
       "slug": "schlitz",
       "brand": "Schlitz",
       "category": "Beer",
-      "logo": "/images/brands/schlitz.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "shock-top",
       "brand": "Shock Top",
       "category": "Beer",
-      "logo": "/images/brands/shock-top.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "singha",
       "brand": "Singha",
       "category": "Beer",
-      "logo": "/images/brands/singha.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "stone-brewing",
       "brand": "Stone Brewing",
       "category": "Beer",
-      "logo": "/images/brands/stone-brewing.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "tecate",
       "brand": "Tecate",
       "category": "Beer",
-      "logo": "/images/brands/tecate.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "tiger",
       "brand": "Tiger",
       "category": "Beer",
-      "logo": "/images/brands/tiger.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "topo-chico",
       "brand": "Topo Chico",
       "category": "Beer",
-      "logo": "/images/brands/topo-chico.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "victoria",
       "brand": "Victoria",
       "category": "Beer",
-      "logo": "/images/brands/victoria.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "yuengling",
       "brand": "Yuengling",
       "category": "Beer",
-      "logo": "/images/brands/yuengling.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "buzzballz",
       "brand": "Buzzballz",
       "category": "RTD",
-      "logo": "/images/brands/buzzballz.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "high-noon",
@@ -649,99 +649,99 @@
       "slug": "mikes-hard-lemonade",
       "brand": "Mike's Hard Lemonade",
       "category": "RTD",
-      "logo": "/images/brands/mikes-hard-lemonade.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "white-claw",
       "brand": "White Claw",
       "category": "RTD",
-      "logo": "/images/brands/white-claw.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "beatbox",
       "brand": "Beatbox",
       "category": "RTD",
-      "logo": "/images/brands/beatbox.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "twisted-tea",
       "brand": "Twisted Tea",
       "category": "RTD",
-      "logo": "/images/brands/twisted-tea.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "cutwater",
       "brand": "Cutwater",
       "category": "RTD",
-      "logo": "/images/brands/cutwater.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "smirnoff-ice",
       "brand": "Smirnoff Ice",
       "category": "RTD",
-      "logo": "/images/brands/smirnoff-ice.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "four-loko",
       "brand": "Four Loko",
       "category": "RTD",
-      "logo": "/images/brands/four-loko.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "nectar",
       "brand": "Nectar",
       "category": "RTD",
-      "logo": "/images/brands/nectar.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "196-suntory",
       "brand": "-196 Suntory",
       "category": "RTD",
-      "logo": "/images/brands/196-suntory.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "the-beast",
       "brand": "The Beast",
       "category": "RTD",
-      "logo": "/images/brands/the-beast.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "truly",
       "brand": "Truly",
       "category": "RTD",
-      "logo": "/images/brands/truly.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "arizona-hard",
       "brand": "Arizona Hard",
       "category": "RTD",
-      "logo": "/images/brands/arizona-hard.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "vmc",
       "brand": "VMC",
       "category": "RTD",
-      "logo": "/images/brands/vmc.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "happy-dad",
       "brand": "Happy Dad",
       "category": "RTD",
-      "logo": "/images/brands/happy-dad.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "nutrl",
@@ -754,22 +754,22 @@
       "slug": "on-the-rocks",
       "brand": "On the Rocks",
       "category": "RTD",
-      "logo": "/images/brands/on-the-rocks.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "surfside",
       "brand": "Surfside",
       "category": "RTD",
-      "logo": "/images/brands/surfside.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "beach-juice",
       "brand": "Beach Juice",
       "category": "RTD",
-      "logo": "/images/brands/beach-juice.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hyoketsu",
@@ -782,36 +782,36 @@
       "slug": "monaco",
       "brand": "Monaco",
       "category": "RTD",
-      "logo": "/images/brands/monaco.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "summer-club",
       "brand": "Summer Club",
       "category": "RTD",
-      "logo": "/images/brands/summer-club.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "angry-orchard",
       "brand": "Angry Orchard",
       "category": "RTD",
-      "logo": "/images/brands/angry-orchard.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "atomic-boss",
       "brand": "Atomic Boss",
       "category": "RTD",
-      "logo": "/images/brands/atomic-boss.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "cayman-jack",
       "brand": "Cayman Jack",
       "category": "RTD",
-      "logo": "/images/brands/cayman-jack.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "clubtails",
@@ -824,15 +824,15 @@
       "slug": "md-20-20",
       "brand": "MD 20/20",
       "category": "RTD",
-      "logo": "/images/brands/md-20-20.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "monster-beast-hard",
       "brand": "Monster Beast Hard",
       "category": "RTD",
-      "logo": "/images/brands/the-beast.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "paradise-ciders",
@@ -845,8 +845,8 @@
       "slug": "simply-spiked",
       "brand": "Simply Spiked",
       "category": "RTD",
-      "logo": "/images/brands/simply-spiked.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "the-club",
@@ -880,8 +880,8 @@
       "slug": "foger",
       "brand": "Foger",
       "category": "RTD",
-      "logo": "/images/brands/foger.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "fruit-smash",
@@ -908,22 +908,22 @@
       "slug": "mxd-drinks",
       "brand": "MXD Drinks",
       "category": "RTD",
-      "logo": "/images/brands/mxd-drinks.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "minute-maid-spiked",
       "brand": "Minute Maid Spiked",
       "category": "RTD",
-      "logo": "/images/brands/minute-maid-spiked.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "mountain-dew-hard",
       "brand": "Mountain Dew Hard",
       "category": "RTD",
-      "logo": "/images/brands/mountain-dew-hard.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ole-tequila",
@@ -936,8 +936,8 @@
       "slug": "partybomb",
       "brand": "Partybomb",
       "category": "RTD",
-      "logo": "/images/brands/partybomb.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "rancho-la-gloria",
@@ -950,8 +950,8 @@
       "slug": "redds",
       "brand": "Redd's",
       "category": "RTD",
-      "logo": "/images/brands/redds.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sun-cruiser",
@@ -964,15 +964,15 @@
       "slug": "topo-chico-hard-seltzer",
       "brand": "Topo Chico Hard Seltzer",
       "category": "RTD",
-      "logo": "/images/brands/topo-chico-hard-seltzer.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "yoju",
       "brand": "Yoju",
       "category": "RTD",
-      "logo": "/images/brands/yoju.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "you-soju",
@@ -985,8 +985,8 @@
       "slug": "austin-eastciders",
       "brand": "Austin Eastciders",
       "category": "RTD",
-      "logo": "/images/brands/austin-eastciders.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "bartles-and-jaymes",
@@ -1013,15 +1013,15 @@
       "slug": "corona-hard-seltzer",
       "brand": "Corona Hard Seltzer",
       "category": "RTD",
-      "logo": "/images/brands/corona-hard-seltzer.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "henrys-hard-soda",
       "brand": "Henrys Hard Soda",
       "category": "RTD",
-      "logo": "/images/brands/henrys-hard-soda.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "jim-beam-highball",
@@ -1069,15 +1069,15 @@
       "slug": "seagrams-escapes",
       "brand": "Seagrams Escapes",
       "category": "RTD",
-      "logo": "/images/brands/seagrams-escapes.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "skinnygirl",
       "brand": "Skinnygirl",
       "category": "RTD",
-      "logo": "/images/brands/skinnygirl.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "spindrift-spiked",
@@ -1090,106 +1090,106 @@
       "slug": "strongbow",
       "brand": "Strongbow",
       "category": "RTD",
-      "logo": "/images/brands/strongbow.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "vizzy",
       "brand": "Vizzy",
       "category": "RTD",
-      "logo": "/images/brands/vizzy.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "wild-basin",
       "brand": "Wild Basin",
       "category": "RTD",
-      "logo": "/images/brands/wild-basin.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "jack-daniels",
       "brand": "Jack Daniel's",
       "category": "Spirits",
-      "logo": "/images/brands/jack-daniels.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "99-bananas",
       "brand": "99 Bananas",
       "category": "Spirits",
-      "logo": "/images/brands/99-bananas.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "crown-royal",
       "brand": "Crown Royal",
       "category": "Spirits",
-      "logo": "/images/brands/crown-royal.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "new-amsterdam",
       "brand": "New Amsterdam",
       "category": "Spirits",
-      "logo": "/images/brands/new-amsterdam.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "malibu",
       "brand": "Malibu",
       "category": "Spirits",
-      "logo": "/images/brands/malibu.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "titos",
       "brand": "Tito's",
       "category": "Spirits",
-      "logo": "/images/brands/titos.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "casamigos",
       "brand": "Casamigos",
       "category": "Spirits",
-      "logo": "/images/brands/casamigos.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "teremana",
       "brand": "Teremana",
       "category": "Spirits",
-      "logo": "/images/brands/teremana.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "smirnoff",
       "brand": "Smirnoff",
       "category": "Spirits",
-      "logo": "/images/brands/smirnoff.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "1800-tequila",
       "brand": "1800 Tequila",
       "category": "Spirits",
-      "logo": "/images/brands/1800-tequila.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "absolut",
       "brand": "Absolut",
       "category": "Spirits",
-      "logo": "/images/brands/absolut.svg",
+      "logo": "/images/brands/absolut.jpg",
       "status": "ok"
     },
     {
       "slug": "hennessy",
       "brand": "Hennessy",
       "category": "Spirits",
-      "logo": "/images/brands/hennessy.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "jose-cuervo",
@@ -1202,8 +1202,8 @@
       "slug": "baileys",
       "brand": "Baileys",
       "category": "Spirits",
-      "logo": "/images/brands/baileys.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "karkov",
@@ -1216,29 +1216,29 @@
       "slug": "jameson",
       "brand": "Jameson",
       "category": "Spirits",
-      "logo": "/images/brands/jameson.webp",
+      "logo": "/images/brands/jameson.jpg",
       "status": "ok"
     },
     {
       "slug": "camarena",
       "brand": "Camarena",
       "category": "Spirits",
-      "logo": "/images/brands/camarena.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "cazadores",
       "brand": "Cazadores",
       "category": "Spirits",
-      "logo": "/images/brands/cazadores.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "corazon",
       "brand": "Corazon",
       "category": "Spirits",
-      "logo": "/images/brands/corazon.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "g4-tequila",
@@ -1251,29 +1251,29 @@
       "slug": "gran-coramino",
       "brand": "Gran Coramino",
       "category": "Spirits",
-      "logo": "/images/brands/gran-coramino.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "grey-goose",
       "brand": "Grey Goose",
       "category": "Spirits",
-      "logo": "/images/brands/grey-goose.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "wheatley",
       "brand": "Wheatley",
       "category": "Spirits",
-      "logo": "/images/brands/wheatley.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "xxl",
       "brand": "XXL",
       "category": "Spirits",
-      "logo": "/images/brands/xxl.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ao-suntory",
@@ -1286,8 +1286,8 @@
       "slug": "bacardi",
       "brand": "Bacardi",
       "category": "Spirits",
-      "logo": "/images/brands/bacardi.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "colonel-e-h-taylor",
@@ -1300,8 +1300,8 @@
       "slug": "don-julio",
       "brand": "Don Julio",
       "category": "Spirits",
-      "logo": "/images/brands/don-julio.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "dusse",
@@ -1314,8 +1314,8 @@
       "slug": "effen",
       "brand": "Effen",
       "category": "Spirits",
-      "logo": "/images/brands/effen.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "elmer-t-lee",
@@ -1328,15 +1328,15 @@
       "slug": "fireball",
       "brand": "Fireball",
       "category": "Spirits",
-      "logo": "/images/brands/fireball.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "fleischmanns",
       "brand": "Fleischmann's",
       "category": "Spirits",
-      "logo": "/images/brands/fleischmanns.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "george-t-stagg",
@@ -1356,8 +1356,8 @@
       "slug": "herradura",
       "brand": "Herradura",
       "category": "Spirits",
-      "logo": "/images/brands/herradura.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ichiko",
@@ -1370,15 +1370,15 @@
       "slug": "jagermeister",
       "brand": "Jagermeister",
       "category": "Spirits",
-      "logo": "/images/brands/jagermeister.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "kahlua",
       "brand": "Kahlua",
       "category": "Spirits",
-      "logo": "/images/brands/kahlua.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "lunazul",
@@ -1391,15 +1391,15 @@
       "slug": "rumchata",
       "brand": "RumChata",
       "category": "Spirits",
-      "logo": "/images/brands/rumchata.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sailor-jerry",
       "brand": "Sailor Jerry",
       "category": "Spirits",
-      "logo": "/images/brands/sailor-jerry.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sheep-dog",
@@ -1412,15 +1412,15 @@
       "slug": "skrewball",
       "brand": "Skrewball",
       "category": "Spirits",
-      "logo": "/images/brands/skrewball.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "still-gin",
       "brand": "Still Gin",
       "category": "Spirits",
-      "logo": "/images/brands/still-gin.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sugarlands",
@@ -1433,8 +1433,8 @@
       "slug": "svedka",
       "brand": "Svedka",
       "category": "Spirits",
-      "logo": "/images/brands/svedka.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "weller",
@@ -1447,15 +1447,15 @@
       "slug": "whip-shots",
       "brand": "Whip Shots",
       "category": "Spirits",
-      "logo": "/images/brands/whip-shots.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "aperol",
       "brand": "Aperol",
       "category": "Spirits",
-      "logo": "/images/brands/aperol.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "avion",
@@ -1468,50 +1468,50 @@
       "slug": "basil-hayden",
       "brand": "Basil Hayden",
       "category": "Spirits",
-      "logo": "/images/brands/basil-hayden.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "beefeater",
       "brand": "Beefeater",
       "category": "Spirits",
-      "logo": "/images/brands/beefeater.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "belvedere",
       "brand": "Belvedere",
       "category": "Spirits",
-      "logo": "/images/brands/belvedere.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "blantons",
       "brand": "Blanton's",
       "category": "Spirits",
-      "logo": "/images/brands/blantons.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "bombay-sapphire",
       "brand": "Bombay Sapphire",
       "category": "Spirits",
-      "logo": "/images/brands/bombay-sapphire.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "buffalo-trace",
       "brand": "Buffalo Trace",
       "category": "Spirits",
-      "logo": "/images/brands/buffalo-trace.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "bulleit",
       "brand": "Bulleit",
       "category": "Spirits",
-      "logo": "/images/brands/bulleit.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "campari",
@@ -1531,22 +1531,22 @@
       "slug": "captain-morgan",
       "brand": "Captain Morgan",
       "category": "Spirits",
-      "logo": "/images/brands/captain-morgan.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "chambord",
       "brand": "Chambord",
       "category": "Spirits",
-      "logo": "/images/brands/chambord.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "chivas-regal",
       "brand": "Chivas Regal",
       "category": "Spirits",
-      "logo": "/images/brands/chivas-regal.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "chum-churum",
@@ -1559,106 +1559,106 @@
       "slug": "ciroc",
       "brand": "Ciroc",
       "category": "Spirits",
-      "logo": "/images/brands/ciroc.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "clase-azul",
       "brand": "Clase Azul",
       "category": "Spirits",
-      "logo": "/images/brands/clase-azul.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "cointreau",
       "brand": "Cointreau",
       "category": "Spirits",
-      "logo": "/images/brands/cointreau.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "courvoisier",
       "brand": "Courvoisier",
       "category": "Spirits",
-      "logo": "/images/brands/courvoisier.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "deep-eddy",
       "brand": "Deep Eddy",
       "category": "Spirits",
-      "logo": "/images/brands/deep-eddy.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "dewars",
       "brand": "Dewar's",
       "category": "Spirits",
-      "logo": "/images/brands/dewars.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "disaronno",
       "brand": "Disaronno",
       "category": "Spirits",
-      "logo": "/images/brands/disaronno.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "don-q",
       "brand": "Don Q",
       "category": "Spirits",
-      "logo": "/images/brands/don-q.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "eagle-rare",
       "brand": "Eagle Rare",
       "category": "Spirits",
-      "logo": "/images/brands/eagle-rare.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "el-jimador",
       "brand": "El Jimador",
       "category": "Spirits",
-      "logo": "/images/brands/el-jimador.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "elijah-craig",
       "brand": "Elijah Craig",
       "category": "Spirits",
-      "logo": "/images/brands/elijah-craig.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "espolon",
       "brand": "Espolon",
       "category": "Spirits",
-      "logo": "/images/brands/espolon.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "evan-williams",
       "brand": "Evan Williams",
       "category": "Spirits",
-      "logo": "/images/brands/evan-williams.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "four-roses",
       "brand": "Four Roses",
       "category": "Spirits",
-      "logo": "/images/brands/four-roses.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "gekkeikan",
       "brand": "Gekkeikan",
       "category": "Spirits",
-      "logo": "/images/brands/gekkeikan.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "glenfiddich",
@@ -1671,22 +1671,22 @@
       "slug": "glenlivet",
       "brand": "Glenlivet",
       "category": "Spirits",
-      "logo": "/images/brands/glenlivet.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "grand-marnier",
       "brand": "Grand Marnier",
       "category": "Spirits",
-      "logo": "/images/brands/grand-marnier.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hakutsuru",
       "brand": "Hakutsuru",
       "category": "Spirits",
-      "logo": "/images/brands/hakutsuru.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hangar-1",
@@ -1699,8 +1699,8 @@
       "slug": "havana-club",
       "brand": "Havana Club",
       "category": "Spirits",
-      "logo": "/images/brands/havana-club.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hawaiian-vintage-chocolate",
@@ -1713,22 +1713,22 @@
       "slug": "hendricks",
       "brand": "Hendrick's",
       "category": "Spirits",
-      "logo": "/images/brands/hendricks.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "hibiki",
       "brand": "Hibiki",
       "category": "Spirits",
-      "logo": "/images/brands/hibiki.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hornitos",
       "brand": "Hornitos",
       "category": "Spirits",
-      "logo": "/images/brands/hornitos.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "hpnotiq",
@@ -1741,36 +1741,36 @@
       "slug": "jim-beam",
       "brand": "Jim Beam",
       "category": "Spirits",
-      "logo": "/images/brands/jim-beam.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "jinro",
       "brand": "Jinro",
       "category": "Spirits",
-      "logo": "/images/brands/jinro.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "johnnie-walker",
       "brand": "Johnnie Walker",
       "category": "Spirits",
-      "logo": "/images/brands/johnnie-walker.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "ketel-one",
       "brand": "Ketel One",
       "category": "Spirits",
-      "logo": "/images/brands/ketel-one.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "knob-creek",
       "brand": "Knob Creek",
       "category": "Spirits",
-      "logo": "/images/brands/knob-creek.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "koloa-rum",
@@ -1783,29 +1783,29 @@
       "slug": "kraken",
       "brand": "Kraken",
       "category": "Spirits",
-      "logo": "/images/brands/kraken.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "macallan",
       "brand": "Macallan",
       "category": "Spirits",
-      "logo": "/images/brands/macallan.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "makers-mark",
       "brand": "Maker's Mark",
       "category": "Spirits",
-      "logo": "/images/brands/makers-mark.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "martell",
       "brand": "Martell",
       "category": "Spirits",
-      "logo": "/images/brands/martell.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "milagro",
@@ -1818,8 +1818,8 @@
       "slug": "mount-gay",
       "brand": "Mount Gay",
       "category": "Spirits",
-      "logo": "/images/brands/mount-gay.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "nikka",
@@ -1839,57 +1839,57 @@
       "slug": "old-forester",
       "brand": "Old Forester",
       "category": "Spirits",
-      "logo": "/images/brands/old-forester.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ozeki",
       "brand": "Ozeki",
       "category": "Spirits",
-      "logo": "/images/brands/ozeki.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "patron",
       "brand": "Patron",
       "category": "Spirits",
-      "logo": "/images/brands/patron.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "pendleton",
       "brand": "Pendleton",
       "category": "Spirits",
-      "logo": "/images/brands/pendleton.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "pinnacle",
       "brand": "Pinnacle",
       "category": "Spirits",
-      "logo": "/images/brands/pinnacle.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "remy-martin",
       "brand": "Remy Martin",
       "category": "Spirits",
-      "logo": "/images/brands/remy-martin.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sauza",
       "brand": "Sauza",
       "category": "Spirits",
-      "logo": "/images/brands/sauza.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "seagrams-7",
       "brand": "Seagram's 7",
       "category": "Spirits",
-      "logo": "/images/brands/seagrams-7.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sho-chiku-bai",
@@ -1902,8 +1902,8 @@
       "slug": "southern-comfort",
       "brand": "Southern Comfort",
       "category": "Spirits",
-      "logo": "/images/brands/southern-comfort.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "suntory",
@@ -1916,22 +1916,22 @@
       "slug": "tanqueray",
       "brand": "Tanqueray",
       "category": "Spirits",
-      "logo": "/images/brands/tanqueray.jpg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "wild-turkey",
       "brand": "Wild Turkey",
       "category": "Spirits",
-      "logo": "/images/brands/wild-turkey.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "woodford-reserve",
       "brand": "Woodford Reserve",
       "category": "Spirits",
-      "logo": "/images/brands/woodford-reserve.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "yamazaki",
@@ -1944,57 +1944,57 @@
       "slug": "barefoot",
       "brand": "Barefoot",
       "category": "Wine",
-      "logo": "/images/brands/barefoot.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "dark-horse",
       "brand": "Dark Horse",
       "category": "Wine",
-      "logo": "/images/brands/dark-horse.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "sutter-home",
       "brand": "Sutter Home",
       "category": "Wine",
-      "logo": "/images/brands/sutter-home.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "19-crimes",
       "brand": "19 Crimes",
       "category": "Wine",
-      "logo": "/images/brands/19-crimes.webp",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "black-box",
       "brand": "Black Box",
       "category": "Wine",
-      "logo": "/images/brands/black-box.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "the-prisoner",
       "brand": "The Prisoner",
       "category": "Wine",
-      "logo": "/images/brands/the-prisoner.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "cupcake",
       "brand": "Cupcake",
       "category": "Wine",
-      "logo": "/images/brands/cupcake.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "decoy",
       "brand": "Decoy",
       "category": "Wine",
-      "logo": "/images/brands/decoy.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "joel-gott",
@@ -2007,43 +2007,43 @@
       "slug": "lamarca",
       "brand": "LaMarca",
       "category": "Wine",
-      "logo": "/images/brands/lamarca.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ruffino",
       "brand": "Ruffino",
       "category": "Wine",
-      "logo": "/images/brands/ruffino.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "woodbridge",
       "brand": "Woodbridge",
       "category": "Wine",
-      "logo": "/images/brands/woodbridge.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "apothic",
       "brand": "Apothic",
       "category": "Wine",
-      "logo": "/images/brands/apothic.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "avaline",
       "brand": "Avaline",
       "category": "Wine",
-      "logo": "/images/brands/avaline.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "ck-mondavi",
       "brand": "CK Mondavi",
       "category": "Wine",
-      "logo": "/images/brands/ck-mondavi.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "clay-shannon",
@@ -2063,15 +2063,15 @@
       "slug": "josh-cellars",
       "brand": "Josh Cellars",
       "category": "Wine",
-      "logo": "/images/brands/josh-cellars.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "kendall-jackson",
       "brand": "Kendall-Jackson",
       "category": "Wine",
-      "logo": "/images/brands/kendall-jackson.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "magnolia-grove",
@@ -2084,15 +2084,15 @@
       "slug": "matua",
       "brand": "Matua",
       "category": "Wine",
-      "logo": "/images/brands/matua.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "meiomi",
       "brand": "Meiomi",
       "category": "Wine",
-      "logo": "/images/brands/meiomi.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "mer-soleil",
@@ -2105,15 +2105,15 @@
       "slug": "mezzacorona",
       "brand": "Mezzacorona",
       "category": "Wine",
-      "logo": "/images/brands/mezzacorona.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "oyster-bay",
       "brand": "Oyster Bay",
       "category": "Wine",
-      "logo": "/images/brands/oyster-bay.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "postmark",
@@ -2126,15 +2126,15 @@
       "slug": "risata",
       "brand": "Risata",
       "category": "Wine",
-      "logo": "/images/brands/risata.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "robert-mondavi",
       "brand": "Robert Mondavi",
       "category": "Wine",
-      "logo": "/images/brands/robert-mondavi.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "the-velvet-devil",
@@ -2147,29 +2147,29 @@
       "slug": "wente",
       "brand": "Wente",
       "category": "Wine",
-      "logo": "/images/brands/wente.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "bogle",
       "brand": "Bogle",
       "category": "Wine",
-      "logo": "/images/brands/bogle.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "bota-box",
       "brand": "Bota Box",
       "category": "Wine",
-      "logo": "/images/brands/bota-box.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "caymus",
       "brand": "Caymus",
       "category": "Wine",
-      "logo": "/images/brands/caymus.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "chateau-ste-michelle",
@@ -2189,8 +2189,8 @@
       "slug": "cooks",
       "brand": "Cooks",
       "category": "Wine",
-      "logo": "/images/brands/cooks.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "duckhorn",
@@ -2203,29 +2203,29 @@
       "slug": "franzia",
       "brand": "Franzia",
       "category": "Wine",
-      "logo": "/images/brands/franzia.png",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "kim-crawford",
       "brand": "Kim Crawford",
       "category": "Wine",
-      "logo": "/images/brands/kim-crawford.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "korbel",
       "brand": "Korbel",
       "category": "Wine",
-      "logo": "/images/brands/korbel.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "la-crema",
       "brand": "La Crema",
       "category": "Wine",
-      "logo": "/images/brands/la-crema.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "layer-cake",
@@ -2238,50 +2238,50 @@
       "slug": "menage-a-trois",
       "brand": "Menage a Trois",
       "category": "Wine",
-      "logo": "/images/brands/menage-a-trois.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "mionetto",
       "brand": "Mionetto",
       "category": "Wine",
-      "logo": "/images/brands/mionetto.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "moet-and-chandon",
       "brand": "Moet and Chandon",
       "category": "Wine",
-      "logo": "/images/brands/moet-and-chandon.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "santa-margherita",
       "brand": "Santa Margherita",
       "category": "Wine",
-      "logo": "/images/brands/santa-margherita.png",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "troublemaker",
       "brand": "Troublemaker",
       "category": "Wine",
-      "logo": "/images/brands/troublemaker.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "veuve-clicquot",
       "brand": "Veuve Clicquot",
       "category": "Wine",
-      "logo": "/images/brands/veuve-clicquot.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "review"
     },
     {
       "slug": "yellow-tail",
       "brand": "Yellow Tail",
       "category": "Wine",
-      "logo": "/images/brands/yellow-tail.svg",
-      "status": "ok"
+      "logo": null,
+      "status": "missing"
     },
     {
       "slug": "smirnoff-ice-smash",
