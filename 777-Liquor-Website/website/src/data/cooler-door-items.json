@@ -1,6 +1,6 @@
 {
   "sourceFile": "cooler-door-inventory.xlsx",
-  "generatedAt": "November 26, 2026",
+  "generatedAt": "November 28, 2026",
   "itemCount": 43,
   "items": [
     {
@@ -118,7 +118,7 @@
       "category": "Beer",
       "size": "4pk 14.9oz",
       "price": 11.99,
-      "logo": "/images/brands/guinness.png",
+      "logo": "/images/brands/guinness.webp",
       "abv": "4.2% ABV",
       "origin": "Dublin, Ireland",
       "description": "Velvety Irish dry stout featuring a nitrogen widget for a creamy cascading head, roasted barley notes, and hints of coffee and cocoa."
@@ -334,7 +334,7 @@
       "category": "RTD",
       "size": "4pk 12oz",
       "price": 13.49,
-      "logo": "/images/brands/196-suntory.svg",
+      "logo": "/images/brands/196-suntory.webp",
       "abv": "5.5% ABV",
       "origin": "Japan",
       "description": "Japanese freeze-crush vodka seltzer infused with whole lemons flash-frozen at -196°C for bright, authentic citrus flavor."
@@ -346,7 +346,7 @@
       "category": "RTD",
       "size": "8pk 12oz",
       "price": 21.49,
-      "logo": "/images/brands/surfside.png",
+      "logo": "/images/brands/surfside.webp",
       "abv": "4.5% ABV",
       "origin": "Philadelphia, PA",
       "description": "Non-carbonated, crisp iced tea blended with smooth vodka—only 100 calories, 2g sugar, and ultra-refreshing over ice."
@@ -370,7 +370,7 @@
       "category": "RTD",
       "size": "12pk 12oz",
       "price": 19.99,
-      "logo": "/images/brands/twisted-tea.png",
+      "logo": "/images/brands/twisted-tea.webp",
       "abv": "5.0% ABV",
       "origin": "United States",
       "description": "Smooth, non-carbonated hard iced tea brewed with real black tea leaves and a bright touch of lemon."
@@ -382,7 +382,7 @@
       "category": "RTD",
       "size": "12pk 12oz",
       "price": 20.99,
-      "logo": "/images/brands/white-claw.png",
+      "logo": "/images/brands/white-claw.webp",
       "abv": "5.0% ABV",
       "origin": "United States",
       "description": "Pure sparkling water spiked with crisp fruit flavors—Black Cherry, Mango, Natural Lime, and Ruby Grapefruit at 100 calories each."
