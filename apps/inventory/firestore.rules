@@ -1,0 +1,257 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 0: Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Reusable Hardened Primitives ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Bootstrapped store owner check (strictly requires email_verified == true)
+    function isBootstrappedAdmin() {
+      return isVerified() && request.auth.token.email == '777liquorstorehi@gmail.com';
+    }
+
+    // Trusted RBAC lookup (never trusts client claims; only used outside allow list)
+    function isAdmin() {
+      return isBootstrappedAdmin() || (
+        isVerified() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isOptionalString(data, key, maxLen) {
+      return !(key in data) || data[key] == null || (data[key] is string && data[key].size() <= maxLen);
+    }
+
+    function isOptionalNonNegativeNumber(data, key) {
+      return !(key in data) || data[key] == null || (data[key] is number && data[key] >= 0 && data[key] <= 1000000);
+    }
+
+    // --- Validation Blueprints (Anti-Update-Gap) ---
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'displayName', 'role', 'createdAt', 'updatedAt'])
+        && data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128
+        && data.uid == userId
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 200
+        && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 120
+        && data.role is string && data.role in ['staff', 'manager', 'owner']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidAdminRecord(data, userId) {
+      return data.keys().hasAll(['uid', 'email', 'grantedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'grantedAt'])
+        && data.uid is string && data.uid == userId && data.uid.size() <= 128
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 200
+        && data.grantedAt is timestamp;
+    }
+
+    function isValidItemFlags(flags) {
+      return flags is list
+        && flags.size() <= 5
+        && flags.hasOnly(['NO_COST', 'NEED_PACK_CONFIG', 'PRICE_DROP', 'REVIEW', 'HI5_CONFIRM']);
+    }
+
+    function isValidInventoryItem(data) {
+      return data.keys().hasAll([
+          'clover_id', 'ownerUid', 'name', 'normalized_name', 'brand',
+          'category', 'subcategory', 'upc', 'price', 'unit_size',
+          'hi5_eligible', 'quantity', 'flags', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'clover_id', 'ownerUid', 'name', 'normalized_name', 'brand',
+          'category', 'subcategory', 'upc', 'price', 'cost', 'cost_source',
+          'vendor', 'unit_size', 'sell_pack_qty', 'packs_per_case',
+          'hi5_eligible', 'logo_url', 'image_url', 'quantity', 'flags',
+          'suggested_price', 'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.clover_id) && data.clover_id.size() <= 64
+        && isValidId(data.ownerUid)
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 200
+        && data.normalized_name is string && data.normalized_name.size() >= 1 && data.normalized_name.size() <= 200
+        && data.brand is string && data.brand.size() <= 120
+        && data.category is string && data.category.size() >= 1 && data.category.size() <= 64
+        && data.subcategory is string && data.subcategory.size() <= 64
+        && data.upc is string && data.upc.size() <= 32
+        && data.price is number && data.price >= 0 && data.price <= 100000
+        && isOptionalNonNegativeNumber(data, 'cost')
+        && isOptionalString(data, 'cost_source', 160)
+        && isOptionalString(data, 'vendor', 120)
+        && data.unit_size is string && data.unit_size.size() <= 40
+        && isOptionalNonNegativeNumber(data, 'sell_pack_qty')
+        && isOptionalNonNegativeNumber(data, 'packs_per_case')
+        && data.hi5_eligible is string && data.hi5_eligible in ['Yes', 'No', 'Confirm']
+        && isOptionalString(data, 'logo_url', 1024)
+        && isOptionalString(data, 'image_url', 1024)
+        && data.quantity is number && data.quantity >= 0 && data.quantity <= 1000000
+        && isValidItemFlags(data.flags)
+        && isOptionalNonNegativeNumber(data, 'suggested_price')
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidStoreState(data) {
+      return data.keys().hasAll(['docType', 'ownerUid', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'docType', 'ownerUid', 'sales_source', 'source_filename',
+          'total_revenue', 'units_sold', 'publishedCount', 'publishedAt',
+          'createdAt', 'updatedAt'
+        ])
+        && data.docType is string && data.docType in ['analytics_summary', 'cooler_door_push']
+        && isValidId(data.ownerUid)
+        && (!('sales_source' in data) || data.sales_source == null || (data.sales_source is string && data.sales_source in ['clover_export', 'clover_api', 'none']))
+        && isOptionalString(data, 'source_filename', 200)
+        && isOptionalNonNegativeNumber(data, 'total_revenue')
+        && isOptionalNonNegativeNumber(data, 'units_sold')
+        && isOptionalNonNegativeNumber(data, 'publishedCount')
+        && isOptionalString(data, 'publishedAt', 64)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+
+    // 1. Private Staff Profiles (PII isolated to owner or admin)
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isSignedIn() && (existing().uid == request.auth.uid || isBootstrappedAdmin());
+
+      allow create: if isVerified()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == request.auth.uid
+        && incoming().role == 'staff'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerified()
+        && isValidId(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Tier 1: Admin override for role management
+          (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'role', 'updatedAt'])) ||
+          // Tier 2: Owner profile edit (role strictly immutable)
+          (isOwner(userId) && incoming().role == existing().role && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'updatedAt']))
+        );
+
+      allow delete: if isVerified() && isValidId(userId) && isAdmin();
+    }
+
+    // 2. Trusted Admin Registry
+    match /admins/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && (isOwner(userId) || isBootstrappedAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create, update: if isBootstrappedAdmin()
+        && isValidId(userId)
+        && isValidAdminRecord(incoming(), userId)
+        && incoming().grantedAt == request.time;
+      allow delete: if isBootstrappedAdmin() && isValidId(userId);
+    }
+
+    // 3. Canonical Inventory Catalog Items
+    match /items/{itemId} {
+      allow get: if isSignedIn()
+        && isValidId(itemId)
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+
+      allow list: if isSignedIn()
+        && (existing().ownerUid == request.auth.uid || isBootstrappedAdmin());
+
+      allow create: if isVerified()
+        && isValidId(itemId)
+        && isValidInventoryItem(incoming())
+        && incoming().ownerUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerified()
+        && isValidId(itemId)
+        && isValidInventoryItem(incoming())
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Tier 1: Store admin or owner catalog edit / Clover sync / pricing update
+          (
+            (existing().ownerUid == request.auth.uid || isAdmin())
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'name', 'normalized_name', 'brand', 'category', 'subcategory',
+              'upc', 'price', 'cost', 'cost_source', 'vendor', 'unit_size',
+              'sell_pack_qty', 'packs_per_case', 'hi5_eligible', 'logo_url',
+              'image_url', 'quantity', 'flags', 'suggested_price', 'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isVerified()
+        && isValidId(itemId)
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+    }
+
+    // 4. Operational Store State Snapshots (Analytics & Cooler Door Push)
+    match /storeState/{docId} {
+      allow get: if isSignedIn()
+        && isValidId(docId)
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+
+      allow list: if isSignedIn()
+        && (existing().ownerUid == request.auth.uid || isBootstrappedAdmin());
+
+      allow create: if isVerified()
+        && isValidId(docId)
+        && isValidStoreState(incoming())
+        && incoming().ownerUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerified()
+        && isValidId(docId)
+        && isValidStoreState(incoming())
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().docType == existing().docType
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (existing().ownerUid == request.auth.uid || isAdmin())
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'sales_source', 'source_filename', 'total_revenue', 'units_sold',
+          'publishedCount', 'publishedAt', 'updatedAt'
+        ]);
+
+      allow delete: if isVerified()
+        && isValidId(docId)
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+    }
+  }
+}

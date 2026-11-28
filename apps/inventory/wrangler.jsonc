@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "777-inventory-app",
+  "main": "cloudflare/inventory-worker.ts",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "routes": [
+    {
+      "pattern": "inventory.777liquor.com",
+      "custom_domain": true
+    }
+  ],
+  "vars": {
+    "APP_ENV": "production",
+    "SITE_ORIGIN": "https://777liquor.com",
+    "INVENTORY_ORIGIN": "https://inventory.777liquor.com",
+    "CLOVER_API_BASE_URL": "https://api.clover.com"
+  }
+  // Configure secrets via Wrangler CLI or Cloudflare Dashboard (never commit secrets):
+  //   npx wrangler secret put CLOVER_MERCHANT_ID
+  //   npx wrangler secret put CLOVER_API_TOKEN
+  //   npx wrangler secret put GEMINI_API_KEY
+}

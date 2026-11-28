@@ -1,0 +1,244 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "Store Staff Profile",
+      "description": "Authenticated store staff member profile for 777 Inventory Operations.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "enum": ["staff", "manager", "owner"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "displayName", "role", "createdAt", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "Store Admin Registry",
+      "description": "Trusted role document granting store-wide admin management permissions.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200
+        },
+        "grantedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "grantedAt"]
+    },
+    "InventoryItem": {
+      "title": "Canonical Inventory Item",
+      "description": "Normalized 777 Liquor SKU synchronized with Clover POS, Toast Retail export, and Cooler Door.",
+      "type": "object",
+      "properties": {
+        "clover_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "normalized_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "brand": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "subcategory": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "upc": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "price": {
+          "type": "number"
+        },
+        "cost": {
+          "type": "number"
+        },
+        "cost_source": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "vendor": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "unit_size": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "sell_pack_qty": {
+          "type": "number"
+        },
+        "packs_per_case": {
+          "type": "number"
+        },
+        "hi5_eligible": {
+          "type": "string",
+          "enum": ["Yes", "No", "Confirm"]
+        },
+        "logo_url": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "image_url": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "flags": {
+          "type": "array"
+        },
+        "suggested_price": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "clover_id",
+        "ownerUid",
+        "name",
+        "normalized_name",
+        "brand",
+        "category",
+        "subcategory",
+        "upc",
+        "price",
+        "unit_size",
+        "hi5_eligible",
+        "quantity",
+        "flags",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "StoreStateDoc": {
+      "title": "Store Operational Snapshot",
+      "description": "Persisted store-level operational snapshot such as analytics summary or Cooler Door last publish metadata.",
+      "type": "object",
+      "properties": {
+        "docType": {
+          "type": "string",
+          "enum": ["analytics_summary", "cooler_door_push"]
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "sales_source": {
+          "type": "string",
+          "enum": ["clover_export", "clover_api", "none"]
+        },
+        "source_filename": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "total_revenue": {
+          "type": "number"
+        },
+        "units_sold": {
+          "type": "number"
+        },
+        "publishedCount": {
+          "type": "number"
+        },
+        "publishedAt": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["docType", "ownerUid", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private staff profile documents restricted to the owner or store admin."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Trusted store administrator registry."
+    },
+    "/items/{itemId}": {
+      "schema": { "$ref": "#/entities/InventoryItem" },
+      "description": "Canonical 777 Liquor inventory catalog items owned by authenticated store accounts."
+    },
+    "/storeState/{docId}": {
+      "schema": { "$ref": "#/entities/StoreStateDoc" },
+      "description": "Operational snapshots for sales analytics and Cooler Door publishing."
+    }
+  }
+}

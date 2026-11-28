@@ -1,0 +1,6 @@
+{
+  "name": "777 Inventory Operations",
+  "description": "Store operations console for 777 Liquor Grocery & Gift Shop (Honolulu, HI) to manage Clover-to-Toast inventory migration, HI-5 deposit compliance, pricing review, and shelf labels.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
