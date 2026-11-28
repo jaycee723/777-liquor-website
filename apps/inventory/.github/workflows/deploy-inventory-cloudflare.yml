@@ -1,0 +1,56 @@
+name: Deploy inventory.777liquor.com to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify-and-deploy:
+    name: Test, Build & Deploy inventory.777liquor.com
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript typecheck
+        run: npm run lint
+
+      - name: Run unit test suite
+        run: >-
+          npx tsx --test
+          server/security.test.ts
+          server/cloverService.test.ts
+          src/services/cloverService.test.ts
+          src/services/apiClient.test.ts
+          src/utils/inventoryRules.test.ts
+          src/utils/importEngine.test.ts
+          src/utils/enrichmentPricingRules.test.ts
+          src/utils/barcodeScanner.test.ts
+          src/utils/phase4Engines.test.ts
+
+      - name: Build production SPA for inventory.777liquor.com
+        env:
+          VITE_USE_MOCK_API: "true"
+          VITE_API_BASE_URL: "https://inventory.777liquor.com"
+        run: npm run build
+
+      - name: Deploy Cloudflare Worker (inventory.777liquor.com)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --config wrangler.jsonc
