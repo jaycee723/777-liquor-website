@@ -24,6 +24,14 @@ export function SiteFooter() {
           <a href="mailto:777liquorstorehi@gmail.com" className="transition hover:text-cyan-300">
             Contact
           </a>
+          <a
+            href="https://inventory.777liquor.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-500 transition hover:text-cyan-300"
+          >
+            Staff Inventory
+          </a>
         </div>
       </div>
     </footer>
